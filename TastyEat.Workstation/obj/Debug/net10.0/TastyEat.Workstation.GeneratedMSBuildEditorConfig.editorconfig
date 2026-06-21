@@ -1,0 +1,77 @@
+is_global = true
+build_property.AvaloniaNameGeneratorIsEnabled = true
+build_property.AvaloniaNameGeneratorBehavior = InitializeComponent
+build_property.AvaloniaNameGeneratorDefaultFieldModifier = internal
+build_property.AvaloniaNameGeneratorFilterByPath = *
+build_property.AvaloniaNameGeneratorFilterByNamespace = *
+build_property.AvaloniaNameGeneratorViewFileNamingStrategy = NamespaceAndClassName
+build_property.AvaloniaNameGeneratorAttachDevTools = true
+build_property.TargetFramework = net10.0
+build_property.TargetFramework = net10.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v10.0
+build_property.RootNamespace = TastyEat.Workstation
+build_property.ProjectDir = /home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.EffectiveAnalysisLevelStyle = 10.0
+build_property.EnableCodeStyleSeverity = 
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/App.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/AnalyticsView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/CityEditWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/ClientEditWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/ClientsView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/Controls/SearchTextBox.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/Controls/SectionHeader.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/LoadingWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/MainWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/ProductEditWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/ProductsView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/ProductTypeEditWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/Styles/ActionButtonStyles.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/Styles/Common.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/Styles/ManagementViewStyles.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

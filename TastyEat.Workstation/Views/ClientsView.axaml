@@ -1,0 +1,104 @@
+<reactive:ReactiveUserControl
+    x:Class="TastyEat.Workstation.Views.ClientsView"
+    x:CompileBindings="False"
+    x:DataType="vm:ClientsViewModel"
+    x:Name="Root"
+    x:TypeArguments="vm:ClientsViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="using:TastyEat.Workstation.Views.Controls"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:reactive="http://reactiveui.net"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:ClientsViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <DataTemplate DataType="vm:ClientRowViewModel" x:Key="IsInTelegramChannelCellTemplate">
+            <CheckBox
+                HorizontalAlignment="Center"
+                IsChecked="{Binding IsInTelegramChannel}"
+                IsHitTestVisible="False" />
+        </DataTemplate>
+
+        <DataTemplate DataType="vm:ClientRowViewModel" x:Key="CityCellTemplate">
+            <TextBlock Text="{Binding City.Name}" VerticalAlignment="Center" />
+        </DataTemplate>
+
+        <DataTemplate DataType="vm:ClientRowViewModel" x:Key="ReferrerCellTemplate">
+            <TextBlock Text="{Binding Referrer.FullName}" VerticalAlignment="Center" />
+        </DataTemplate>
+
+        <DataTemplate DataType="vm:ClientRowViewModel" x:Key="ActionsCellTemplate">
+            <Button Classes="action">
+                <icons:MaterialIcon Kind="Menu" />
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuItem
+                            Command="{Binding #Root.DataContext.EditClientCommand}"
+                            CommandParameter="{Binding}"
+                            Header="Изменить клиента">
+                            <MenuItem.Icon>
+                                <icons:MaterialIcon Kind="Pencil" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem
+                            Command="{Binding #Root.DataContext.ShowStatisticsCommand}"
+                            CommandParameter="{Binding}"
+                            Header="Открыть статистику клиента">
+                            <MenuItem.Icon>
+                                <icons:MaterialIcon Kind="ChartBox" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem
+                            Command="{Binding #Root.DataContext.DeleteClientCommand}"
+                            CommandParameter="{Binding}"
+                            Header="Удалить клиента">
+                            <MenuItem.Icon>
+                                <icons:MaterialIcon Kind="Delete" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid
+        Classes="managementLayout"
+        ColumnDefinitions="300,Auto,*"
+        RowDefinitions="Auto,*">
+        <controls:SectionHeader
+            Grid.ColumnSpan="3"
+            IconKind="AccountMultiple"
+            Subtitle="Управление клиентами и городами"
+            Title="Клиенты" />
+
+        <StackPanel Classes="sidebar" Grid.Column="0" Grid.Row="1">
+            <controls:SearchTextBox Text="{Binding SearchText}" />
+            <Button Command="{Binding AddClientCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <icons:MaterialIcon Kind="AccountPlus" />
+                    <TextBlock Text="Добавить клиента" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding AddCityCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <icons:MaterialIcon Kind="CityVariantOutline" />
+                    <TextBlock Text="Добавить город" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <GridSplitter
+            Classes="sidebarSplitter"
+            Grid.Column="1"
+            Grid.Row="1" />
+
+        <Border Classes="dataGridHost" Grid.Column="2" Grid.Row="1">
+            <TreeDataGrid Source="{Binding ClientsSource}" />
+        </Border>
+    </Grid>
+</reactive:ReactiveUserControl>

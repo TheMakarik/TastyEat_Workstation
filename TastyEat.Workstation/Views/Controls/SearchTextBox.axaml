@@ -1,0 +1,19 @@
+<UserControl
+    x:Class="TastyEat.Workstation.Views.Controls.SearchTextBox"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="using:TastyEat.Workstation.Views.Controls"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <TextBox
+        x:Name="searchTextBox"
+        PlaceholderText="Поиск"
+        Text="{Binding Text, RelativeSource={RelativeSource AncestorType=controls:SearchTextBox}, Mode=TwoWay}">
+        <TextBox.InnerLeftContent>
+            <icons:MaterialIcon
+                Foreground="{Binding #searchTextBox.BorderBrush}"
+                Kind="Magnify" />
+        </TextBox.InnerLeftContent>
+    </TextBox>
+
+</UserControl>

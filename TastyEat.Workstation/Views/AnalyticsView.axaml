@@ -1,0 +1,15 @@
+<UserControl
+    x:Class="TastyEat.Workstation.Views.AnalyticsView"
+    x:DataType="vm:AnalyticsViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="using:TastyEat.Workstation.Views.Controls"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Margin="24" RowDefinitions="Auto,*">
+        <controls:SectionHeader
+            IconKind="ChartBox"
+            Subtitle="Продажи, производство и остатки"
+            Title="Аналитика" />
+    </Grid>
+</UserControl>

@@ -1,0 +1,36 @@
+<Window
+    CanResize="False"
+    Height="180"
+    ShowInTaskbar="False"
+    Title="Кушай Вкусно!"
+    Width="420"
+    WindowDecorations="BorderOnly"
+    WindowStartupLocation="CenterScreen"
+    x:Class="TastyEat.Workstation.Views.LoadingWindow"
+    x:DataType="vm:LoadingWindowViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:LoadingWindowViewModel />
+    </Design.DataContext>
+
+    <Border Padding="32">
+        <StackPanel Spacing="16" VerticalAlignment="Center">
+            <TextBlock
+                FontSize="18"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                Text="Кушай Вкусно! - Управление" />
+            <TextBlock
+                FontSize="14"
+                HorizontalAlignment="Center"
+                Text="{Binding Status}" />
+            <ProgressBar
+                Height="12"
+                Maximum="100"
+                Value="{Binding Progress}" />
+        </StackPanel>
+    </Border>
+</Window>

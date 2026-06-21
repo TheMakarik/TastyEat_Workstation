@@ -1,0 +1,39 @@
+<Application
+    RequestedThemeVariant="Light"
+    x:Class="TastyEat.Workstation.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:semi="https://irihi.tech/semi"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <Color x:Key="SystemListLowColor">#FFE0E0E0</Color>
+                    <Color x:Key="SystemBaseHighColor">#FF000000</Color>
+                    <Color x:Key="SystemBaseMediumLowColor">#FF666666</Color>
+                    <Color x:Key="SystemAccentColor">#512BD4</Color>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <Color x:Key="SystemListLowColor">#FF2D2D2D</Color>
+                    <Color x:Key="SystemBaseHighColor">#FFFFFFFF</Color>
+                    <Color x:Key="SystemBaseMediumLowColor">#FFA0A0A0</Color>
+                    <Color x:Key="SystemAccentColor">#7559E0</Color>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
+            <Color x:Key="DotNetPurpleColor">#512BD4</Color>
+            <SolidColorBrush Color="{StaticResource DotNetPurpleColor}" x:Key="AccentColor" />
+            <SolidColorBrush Color="#7559E0" x:Key="AccentLightBrush" />
+            <SolidColorBrush Color="#E6E1F9" x:Key="AccentPurpleBrush" />
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.Styles>
+        <semi:SemiTheme Locale="ru-RU" />
+        <icons:MaterialIconStyles />
+        <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml" />
+        <StyleInclude Source="avares://TastyEat.Workstation/Views/Styles/Common.axaml" />
+    </Application.Styles>
+</Application>

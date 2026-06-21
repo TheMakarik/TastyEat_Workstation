@@ -1,0 +1,74 @@
+<reactive:ReactiveWindow
+    CanResize="False"
+    Height="520"
+    Title="{Binding Title}"
+    Width="480"
+    WindowStartupLocation="CenterOwner"
+    x:Class="TastyEat.Workstation.Views.ClientEditWindow"
+    x:DataType="vm:ClientEditViewModel"
+    x:TypeArguments="vm:ClientEditViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:reactive="http://reactiveui.net"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:ClientEditViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="24" RowDefinitions="Auto,*,Auto">
+        <TextBlock
+            FontSize="20"
+            FontWeight="Bold"
+            Text="{Binding Title}" />
+
+        <StackPanel Grid.Row="1" Margin="0,20,0,0" Spacing="16">
+            <StackPanel Spacing="4">
+                <TextBlock Text="ФИО" />
+                <TextBox Text="{Binding FullName}" PlaceholderText="Иванов Иван Иванович" />
+            </StackPanel>
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="Телефон" />
+                <TextBox Text="{Binding PhoneNumber}" PlaceholderText="+7 (999) 123-45-67" />
+            </StackPanel>
+
+            <CheckBox Content="В Telegram канале" IsChecked="{Binding IsInTelegramChannel}" />
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="Город" />
+                <ComboBox
+                    DisplayMemberBinding="{Binding Name}"
+                    ItemsSource="{Binding Cities}"
+                    PlaceholderText="Выберите город"
+                    SelectedItem="{Binding SelectedCity}" />
+            </StackPanel>
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="Приглашён" />
+                <AutoCompleteBox
+                    ItemsSource="{Binding Referrers}"
+                    MinimumPrefixLength="1"
+                    PlaceholderText="Начните вводить ФИО"
+                    SelectedItem="{Binding SelectedReferrer}"
+                    Text="{Binding ReferrerSearchText}"
+                    ValueMemberBinding="{Binding FullName}" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal"
+            Spacing="12">
+            <Button
+                Command="{Binding SaveCommand}"
+                Content="Сохранить"
+                IsDefault="True" />
+            <Button
+                Click="CancelButton_Click"
+                Content="Отмена"
+                IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</reactive:ReactiveWindow>

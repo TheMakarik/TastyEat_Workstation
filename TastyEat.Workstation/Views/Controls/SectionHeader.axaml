@@ -1,0 +1,33 @@
+<UserControl
+    x:Class="TastyEat.Workstation.Views.Controls.SectionHeader"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="using:TastyEat.Workstation.Views.Controls"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <StackPanel Orientation="Horizontal" Spacing="16">
+        <Border
+            Background="{DynamicResource AccentPurpleBrush}"
+            CornerRadius="12"
+            Height="56"
+            Padding="14"
+            Width="56">
+            <icons:MaterialIcon
+                Foreground="{DynamicResource AccentColor}"
+                Height="28"
+                Kind="{Binding IconKind, RelativeSource={RelativeSource AncestorType=controls:SectionHeader}}"
+                Width="28" />
+        </Border>
+        <StackPanel Spacing="2" VerticalAlignment="Center">
+            <TextBlock
+                FontSize="24"
+                FontWeight="Bold"
+                Foreground="#1A1A1A"
+                Text="{Binding Title, RelativeSource={RelativeSource AncestorType=controls:SectionHeader}}" />
+            <TextBlock
+                FontSize="14"
+                Foreground="#666666"
+                Text="{Binding Subtitle, RelativeSource={RelativeSource AncestorType=controls:SectionHeader}}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

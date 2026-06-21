@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="TastyEat.Workstation/App.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/AnalyticsView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/ClientEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/ClientsView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/Controls/SectionHeader.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/LoadingWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/MainWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/ProductEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/ProductsView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/Styles/ActionButtonStyles.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/Styles/ManagementViewStyles.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/Styles/SearchTextBoxStyles.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

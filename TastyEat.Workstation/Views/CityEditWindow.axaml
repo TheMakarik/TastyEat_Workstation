@@ -1,0 +1,45 @@
+<reactive:ReactiveWindow
+    CanResize="False"
+    Height="220"
+    Title="Добавить город"
+    Width="400"
+    WindowStartupLocation="CenterOwner"
+    x:Class="TastyEat.Workstation.Views.CityEditWindow"
+    x:DataType="vm:CityEditViewModel"
+    x:TypeArguments="vm:CityEditViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:reactive="http://reactiveui.net"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:CityEditViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="24" RowDefinitions="Auto,*,Auto">
+        <TextBlock
+            FontSize="20"
+            FontWeight="Bold"
+            Text="Добавить город" />
+
+        <StackPanel Grid.Row="1" Margin="0,20,0,0" Spacing="4">
+            <TextBlock Text="Название города" />
+            <TextBox Text="{Binding Name}" PlaceholderText="Введите название города" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal"
+            Spacing="12">
+            <Button
+                Command="{Binding SaveCommand}"
+                Content="Добавить"
+                IsDefault="True" />
+            <Button
+                Click="CancelButton_Click"
+                Content="Отмена"
+                IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</reactive:ReactiveWindow>

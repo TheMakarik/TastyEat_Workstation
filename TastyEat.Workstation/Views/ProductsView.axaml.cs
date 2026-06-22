@@ -47,7 +47,7 @@ public partial class ProductsView : ReactiveUserControl<ProductsViewModel>
         var result = false;
 
         var deleteButton = new Button { Content = "Удалить" };
-        deleteButton.Classes.Add("Danger");
+        deleteButton.Classes.Add("accent");
         var cancelButton = new Button { Content = "Отмена", IsCancel = true };
 
         var dialog = new Window

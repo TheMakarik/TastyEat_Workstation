@@ -25,7 +25,7 @@
         </Style>
 
         <Style Selector="TabControl.sidebar TabItem">
-            <Setter Property="Width" Value="200" />
+            <Setter Property="Width" Value="240" />
             <Setter Property="Height" Value="56" />
             <Setter Property="Padding" Value="20,0" />
             <Setter Property="FontSize" Value="15" />
@@ -37,6 +37,14 @@
 
         <Style Selector="TabControl.sidebar TabItem:selected">
             <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+
+        <Style Selector="TabControl.sidebar TabItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="TextBlock.Foreground" Value="White" />
+        </Style>
+
+        <Style Selector="TabControl.sidebar TabItem:selected /template/ ContentPresenter#PART_ContentPresenter icons|MaterialIcon">
             <Setter Property="Foreground" Value="White" />
         </Style>
 
@@ -52,12 +60,16 @@
         SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
         <TabControl.ItemTemplate>
             <DataTemplate DataType="{x:Type vm:ViewModelBase}">
-                <StackPanel Orientation="Horizontal" Spacing="12">
+                <StackPanel Orientation="Horizontal" Spacing="20">
                     <icons:MaterialIcon
+                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"
                         Height="22"
                         Kind="{Binding IconName, Converter={StaticResource StringToIconKindConverter}}"
                         Width="22" />
-                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+                    <TextBlock
+                        Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=TabItem}}"
+                        Text="{Binding Title}"
+                        VerticalAlignment="Center" />
                 </StackPanel>
             </DataTemplate>
         </TabControl.ItemTemplate>
@@ -70,6 +82,9 @@
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type vm:ProductsViewModel}">
                             <views:ProductsView DataContext="{Binding}" />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:ProductionsViewModel}">
+                            <views:ProductionsView DataContext="{Binding}" />
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type vm:AnalyticsViewModel}">
                             <views:AnalyticsView DataContext="{Binding}" />

@@ -1,3 +1,4 @@
+
 <reactive:ReactiveUserControl
     x:Class="TastyEat.Workstation.Views.ProductsView"
     x:CompileBindings="False"
@@ -63,38 +64,43 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid
-        Classes="managementLayout"
-        ColumnDefinitions="300,Auto,*"
-        RowDefinitions="Auto,*">
+    <Grid Classes="managementLayout" RowDefinitions="Auto,Auto,*">
         <controls:SectionHeader
-            Grid.ColumnSpan="3"
+            Grid.Row="0"
             IconKind="PackageVariant"
             Subtitle="Управление товарами, типами и ценами"
             Title="Товары" />
 
-        <StackPanel Classes="sidebar" Grid.Column="0" Grid.Row="1">
-            <controls:SearchTextBox Text="{Binding SearchText}" />
-            <Button Command="{Binding AddProductTypeCommand}">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <icons:MaterialIcon Kind="ShapeOutline" />
-                    <TextBlock Text="Добавить тип" VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
-            <Button Command="{Binding AddProductCommand}">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <icons:MaterialIcon Kind="Plus" />
-                    <TextBlock Text="Добавить продукт" VerticalAlignment="Center" />
-                </StackPanel>
-            </Button>
-        </StackPanel>
+        <Grid
+            Classes="topbar"
+            ColumnDefinitions="*,Auto"
+            Grid.Row="1">
+            <controls:SearchTextBox
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                Text="{Binding SearchText}"
+                Width="320" />
 
-        <GridSplitter
-            Classes="sidebarSplitter"
-            Grid.Column="1"
-            Grid.Row="1" />
+            <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                Spacing="12">
+                <Button Classes="sidebarAction" Command="{Binding AddProductTypeCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <icons:MaterialIcon Kind="ShapeOutline" />
+                        <TextBlock Text="Добавить тип" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+                <Button Classes="accent" Command="{Binding AddProductCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <icons:MaterialIcon Kind="Plus" />
+                        <TextBlock Text="Добавить продукт" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
 
-        <Border Classes="dataGridHost" Grid.Column="2" Grid.Row="1">
+        <Border Classes="dataGridHost" Grid.Row="2">
             <TreeDataGrid Source="{Binding ProductsSource}" />
         </Border>
     </Grid>

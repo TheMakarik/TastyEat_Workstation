@@ -108,7 +108,7 @@ public sealed partial class ClientEditViewModel : ValidatableViewModelBase
             }))
             .ObserveOn(RxApp.MainThreadScheduler);
 
-        this.ValidationRule(referrerExistsObservable, "Клиент с таким ФИО не найден");
+        this.ValidationRule(referrerExistsObservable, "Приглашённый клиент с таким ФИО не существует");
 
         _canExecute = this.IsValid().ObserveOn(RxApp.MainThreadScheduler);
     }

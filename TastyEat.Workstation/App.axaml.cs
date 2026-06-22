@@ -53,7 +53,6 @@ public partial class App : Application
         
         mainWindow.Show();
         loadingWindow.Close();
-        Console.Write("DSGDG");
         
         desktop.ShutdownRequested += (_, _) =>
         {

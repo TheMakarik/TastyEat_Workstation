@@ -217,7 +217,8 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
         {
             Id = product.Id,
             Name = product.Name,
-            Kind = ProductNodeKind.Product
+            Kind = ProductNodeKind.Product,
+            IsWeighted = product.IsWeighted
         };
 
         var currentPrice = product.Prices

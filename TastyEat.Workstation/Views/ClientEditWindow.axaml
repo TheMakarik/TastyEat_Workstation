@@ -33,7 +33,10 @@
                 <TextBox Text="{Binding PhoneNumber}" PlaceholderText="+7 (999) 123-45-67" />
             </StackPanel>
 
-            <CheckBox Content="В Telegram канале" IsChecked="{Binding IsInTelegramChannel}" />
+            <CheckBox
+                Content="В Telegram канале"
+                IsChecked="{Binding IsInTelegramChannel}"
+                Margin="0,8,0,0" />
 
             <StackPanel Spacing="4">
                 <TextBlock Text="Город" />

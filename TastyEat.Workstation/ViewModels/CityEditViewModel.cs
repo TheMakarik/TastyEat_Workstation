@@ -26,8 +26,12 @@ public sealed partial class CityEditViewModel : ValidatableViewModelBase
 
         this.ValidationRule(
             vm => vm.Name,
-            name => !string.IsNullOrWhiteSpace(name)
-                    && name.Length <= _stringLengthOptions.CityNameMaxLength,
+            name => !string.IsNullOrWhiteSpace(name),
+            "Название города обязательно");
+
+        this.ValidationRule(
+            vm => vm.Name,
+            name => string.IsNullOrWhiteSpace(name) || name.Length <= _stringLengthOptions.CityNameMaxLength,
             $"Название города не должно превышать {_stringLengthOptions.CityNameMaxLength} символов");
 
         var nameUniqueObservable = this.WhenAnyValue(vm => vm.Name)

@@ -45,6 +45,11 @@
                     Minimum="0"
                     Value="{Binding Price}" />
             </StackPanel>
+
+            <CheckBox
+                Content="Использовать вес (цена за 1 кг)"
+                IsChecked="{Binding IsWeighted}"
+                Margin="0,8,0,0" />
         </StackPanel>
 
         <StackPanel

@@ -30,6 +30,9 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
     private int? _price;
 
     [Reactive]
+    private bool _isWeighted;
+
+    [Reactive]
     private IReadOnlyList<ProductType> _productTypes = [];
 
     [Reactive]
@@ -39,13 +42,17 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
     {
         _scopeFactory = scopeFactory;
         _stringLengthOptions = stringLengthOptions.Value;
+        
+        this.ValidationRule(
+            vm => vm.Name,
+            name => string.IsNullOrWhiteSpace(name) || name.Length <= _stringLengthOptions.ProductNameMaxLength,
+            $"Название продукта не должно превышать {_stringLengthOptions.ProductNameMaxLength} символов");
 
         this.ValidationRule(
             vm => vm.Name,
-            name => !string.IsNullOrWhiteSpace(name)
-                    && name.Length <= _stringLengthOptions.ProductNameMaxLength,
-            $"Название продукта не должно превышать {_stringLengthOptions.ProductNameMaxLength} символов");
-
+            name => !string.IsNullOrWhiteSpace(name),
+            "Название продукта обязательно");
+        
         this.ValidationRule(
             vm => vm.SelectedProductType,
             type => type is not null,
@@ -54,7 +61,7 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
         this.ValidationRule(
             vm => vm.Price,
             price => price.HasValue && price.Value > 0,
-            "Цена должна быть больше нуля");
+            "Цена обязательна и должна быть положительным числом");
 
         _canExecute = this.IsValid().ObserveOn(RxApp.MainThreadScheduler);
     }
@@ -72,6 +79,7 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
             Name = string.Empty;
             SelectedProductType = productTypes.FirstOrDefault();
             Price = null;
+            IsWeighted = false;
             return;
         }
 
@@ -83,6 +91,7 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
             .Where(p => p.EffectiveTo == null)
             .OrderByDescending(p => p.EffectiveFrom)
             .FirstOrDefault()?.Price;
+        IsWeighted = product.IsWeighted;
     }
 
     [ReactiveCommand(CanExecute = nameof(_canExecute), OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
@@ -96,7 +105,8 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
             Id = Id,
             Name = Name.Trim(),
             ProductTypeId = SelectedProductType?.Id ?? throw new InvalidOperationException("Тип продукта не выбран"),
-            Price = Price ?? throw new InvalidOperationException("Цена не указана")
+            Price = Price ?? throw new InvalidOperationException("Цена не указана"),
+            IsWeighted = IsWeighted
         };
 
         var product = IsNew

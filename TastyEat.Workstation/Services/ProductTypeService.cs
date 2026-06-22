@@ -22,6 +22,7 @@ public sealed class ProductTypeService : IProductTypeService
     {
         return await _context.ProductTypes
             .AsNoTracking()
+            .Include(t => t.Products)
             .OrderBy(t => t.Name)
             .ToListAsync(cancellationToken);
     }

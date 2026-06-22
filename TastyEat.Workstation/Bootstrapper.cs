@@ -5,7 +5,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TastyEat.Workstation.Models;
-using TastyEat.Workstation.Models.Tables;
 using TastyEat.Workstation.Options;
 using TastyEat.Workstation.ViewModels;
 
@@ -55,34 +54,8 @@ public sealed class Bootstrapper
         await using var scope = app.Services.CreateAsyncScope();
         var context = scope.ServiceProvider.GetRequiredService<DataContext>();
         await context.Database.MigrateAsync();
-        await SeedDataAsync(context);
 
         progress.Report(100);
         return app;
-    }
-
-    private static async Task SeedDataAsync(DataContext context)
-    {
-        if (!await context.Cities.AnyAsync())
-        {
-            context.Cities.AddRange(
-                new City { Name = "Москва" },
-                new City { Name = "Санкт-Петербург" },
-                new City { Name = "Казань" });
-            await context.SaveChangesAsync();
-        }
-
-        if (!await context.Clients.AnyAsync())
-        {
-            var city = await context.Cities.FirstAsync();
-            context.Clients.Add(new Client
-            {
-                FullName = "Иванов Иван Иванович",
-                PhoneNumber = "79991234567",
-                City = city,
-                IsInTelegramChannel = true
-            });
-            await context.SaveChangesAsync();
-        }
     }
 }

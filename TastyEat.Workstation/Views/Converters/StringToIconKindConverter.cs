@@ -10,9 +10,7 @@ public sealed class StringToIconKindConverter : IValueConverter
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not string name)
-        {
-            return default;
-        }
+            return null;
 
         return Enum.TryParse<MaterialIconKind>(name, out var kind) ? kind : default;
     }

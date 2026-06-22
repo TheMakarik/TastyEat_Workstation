@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <StyleInclude Source="avares://TastyEat.Workstation/Views/Styles/ManagementViewStyles.axaml" />
-    <StyleInclude Source="avares://TastyEat.Workstation/Views/Styles/ActionButtonStyles.axaml" />
+    <StyleInclude Source="avares://TastyEat.Workstation/Views/Styles/ButtonStyles.axaml" />
+    <StyleInclude Source="avares://TastyEat.Workstation/Views/Styles/ControlsStyles.axaml" />
 
 </Styles>

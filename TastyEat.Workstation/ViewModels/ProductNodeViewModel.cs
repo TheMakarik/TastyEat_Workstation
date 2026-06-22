@@ -24,11 +24,14 @@ public sealed partial class ProductNodeViewModel : ReactiveObject
     [Reactive]
     private string _priceText = string.Empty;
 
+    [Reactive]
+    private bool _isWeighted;
+
     public ObservableCollection<ProductNodeViewModel> Children { get; } = [];
 
     public bool IsProductType => Kind == ProductNodeKind.Type;
 
     public bool IsProduct => Kind == ProductNodeKind.Product;
 
-    public void SetPrice(int price) => PriceText = $"{price:N0} ₽";
+    public void SetPrice(int price) => PriceText = IsWeighted ? $"{price:N0} ₽/кг" : $"{price:N0} ₽";
 }

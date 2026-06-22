@@ -135,6 +135,9 @@ namespace TastyEat.Workstation.Migrations
                         .HasColumnType("TEXT")
                         .HasDefaultValueSql("datetime('now')");
 
+                    b.Property<bool>("IsWeighted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -203,6 +206,9 @@ namespace TastyEat.Workstation.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
@@ -223,8 +229,8 @@ namespace TastyEat.Workstation.Migrations
                     b.Property<int>("ProductionBatchId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Quantity")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 

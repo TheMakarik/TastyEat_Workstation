@@ -1,0 +1,95 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- TextBox -->
+    <Style Selector="TextBox /template/ Border#PART_ContentPresenterBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="TextBox:pointerover /template/ Border#PART_ContentPresenterBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+    <Style Selector="TextBox:focus /template/ Border#PART_ContentPresenterBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+    <Style Selector="TextBox:disabled /template/ Border#PART_ContentPresenterBorder">
+        <Setter Property="BorderBrush" Value="#CCCCCC" />
+    </Style>
+
+    <!-- CheckBox -->
+    <Style Selector="CheckBox /template/ Border#NormalRectangle">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="CheckBox:pointerover /template/ Border#NormalRectangle">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+    <Style Selector="CheckBox:checked /template/ Border#NormalRectangle,
+                   CheckBox:indeterminate /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="CheckBox:checked:pointerover /template/ Border#NormalRectangle,
+                   CheckBox:indeterminate:pointerover /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="{DynamicResource AccentLightBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+    <Style Selector="CheckBox:checked:pressed /template/ Border#NormalRectangle,
+                   CheckBox:indeterminate:pressed /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <!-- ComboBox -->
+    <Style Selector="ComboBox /template/ Border#Background">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="ComboBox:pointerover /template/ Border#Background">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+    <Style Selector="ComboBox:focus /template/ Border#Background">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+    <Style Selector="ComboBox:dropdownopen /template/ Border#Background">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+    <!-- ComboBoxItem -->
+    <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentLightBrush}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="ComboBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="ComboBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentLightBrush}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <!-- NumericUpDown inner TextBox is covered by TextBox styles above -->
+    <Style Selector="NumericUpDown /template/ ButtonSpinner#PART_Spinner">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="NumericUpDown:pointerover /template/ ButtonSpinner#PART_Spinner">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+    <Style Selector="NumericUpDown:focus /template/ ButtonSpinner#PART_Spinner">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+</Styles>

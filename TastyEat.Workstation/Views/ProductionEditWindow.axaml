@@ -1,0 +1,96 @@
+<reactive:ReactiveWindow
+    CanResize="False"
+    Height="600"
+    Title="Добавить продукцию"
+    Width="800"
+    WindowStartupLocation="CenterOwner"
+    x:Class="TastyEat.Workstation.Views.ProductionEditWindow"
+    x:CompileBindings="False"
+    x:DataType="vm:ProductionEditViewModel"
+    x:Name="Root"
+    x:TypeArguments="vm:ProductionEditViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:reactive="http://reactiveui.net"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:ProductionEditViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="24" RowDefinitions="Auto,Auto,*,Auto">
+        <TextBlock
+            FontSize="20"
+            FontWeight="Bold"
+            Text="Добавить продукцию" />
+
+        <StackPanel Grid.Row="1" Margin="0,20,0,0" Spacing="4">
+            <TextBlock Text="Дата" />
+            <DatePicker SelectedDate="{Binding Date}" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2" Margin="0,20,0,0">
+            <ItemsControl ItemsSource="{Binding Rows}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:ProductionItemEditViewModel">
+                        <Grid
+                            ColumnDefinitions="*,*,*,Auto"
+                            Margin="0,0,0,12"
+                            VerticalAlignment="Center">
+                            <ComboBox
+                                DisplayMemberBinding="{Binding Name}"
+                                Grid.Column="0"
+                                ItemsSource="{Binding ProductTypes}"
+                                PlaceholderText="Категория"
+                                SelectedItem="{Binding SelectedProductType}" />
+                            <ComboBox
+                                DisplayMemberBinding="{Binding Name}"
+                                Grid.Column="1"
+                                IsEnabled="{Binding IsProductEnabled}"
+                                ItemsSource="{Binding Products}"
+                                Margin="12,0,0,0"
+                                PlaceholderText="Продукт"
+                                SelectedItem="{Binding SelectedProduct}" />
+                            <NumericUpDown
+                                Grid.Column="2"
+                                Increment="1"
+                                Margin="12,0,0,0"
+                                Minimum="0"
+                                Value="{Binding Quantity}" />
+                            <Button
+                                Classes="action"
+                                Command="{Binding #Root.DataContext.RemoveRowCommand}"
+                                CommandParameter="{Binding}"
+                                Grid.Column="3"
+                                Margin="12,0,0,0">
+                                <icons:MaterialIcon Kind="Close" />
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel
+            Grid.Row="3"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal"
+            Spacing="12">
+            <Button Command="{Binding AddRowCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <icons:MaterialIcon Kind="Plus" />
+                    <TextBlock Text="Добавить строку" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button
+                Command="{Binding SaveCommand}"
+                Content="Сохранить"
+                IsDefault="True" />
+            <Button
+                Click="CancelButton_Click"
+                Content="Отмена"
+                IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</reactive:ReactiveWindow>

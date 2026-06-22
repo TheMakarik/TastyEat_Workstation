@@ -1,0 +1,81 @@
+<reactive:ReactiveUserControl
+    x:Class="TastyEat.Workstation.Views.ProductionsView"
+    x:CompileBindings="False"
+    x:DataType="vm:ProductionsViewModel"
+    x:Name="Root"
+    x:TypeArguments="vm:ProductionsViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="using:TastyEat.Workstation.Views.Controls"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:reactive="http://reactiveui.net"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:ProductionsViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <DataTemplate DataType="vm:ProductionNodeViewModel" x:Key="ProductionActionsCellTemplate">
+            <Button Classes="action">
+                <icons:MaterialIcon Kind="Menu" />
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuItem
+                            Command="{Binding #Root.DataContext.EditNodeCommand}"
+                            CommandParameter="{Binding}"
+                            Header="Изменить"
+                            IsVisible="{Binding IsItem}">
+                            <MenuItem.Icon>
+                                <icons:MaterialIcon Kind="Pencil" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem
+                            Command="{Binding #Root.DataContext.DeleteNodeCommand}"
+                            CommandParameter="{Binding}"
+                            Header="Удалить">
+                            <MenuItem.Icon>
+                                <icons:MaterialIcon Kind="Delete" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid
+        Classes="managementLayout"
+        RowDefinitions="Auto,Auto,*">
+        <controls:SectionHeader
+            Grid.Row="0"
+            IconKind="Factory"
+            Subtitle="Учёт произведённой продукции"
+            Title="Создание продукции" />
+
+        <Grid
+            Classes="topbar"
+            ColumnDefinitions="*,Auto"
+            Grid.Row="1">
+            <controls:SearchTextBox
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                Text="{Binding SearchText}"
+                Width="320" />
+
+            <Button
+                Classes="accent"
+                Command="{Binding AddProductionCommand}"
+                Grid.Column="1">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <icons:MaterialIcon Kind="Plus" />
+                    <TextBlock Text="Добавить продукцию" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <Border Classes="dataGridHost" Grid.Row="2">
+            <TreeDataGrid Source="{Binding ProductionsSource}" />
+        </Border>
+    </Grid>
+</reactive:ReactiveUserControl>

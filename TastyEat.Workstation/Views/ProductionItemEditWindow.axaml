@@ -1,0 +1,70 @@
+<reactive:ReactiveWindow
+    CanResize="False"
+    Height="360"
+    Title="Изменить позицию"
+    Width="520"
+    WindowStartupLocation="CenterOwner"
+    x:Class="TastyEat.Workstation.Views.ProductionItemEditWindow"
+    x:CompileBindings="False"
+    x:DataType="vm:ProductionItemEditViewModel"
+    x:TypeArguments="vm:ProductionItemEditViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:reactive="http://reactiveui.net"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:ProductionItemEditViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="24" RowDefinitions="Auto,*,Auto">
+        <TextBlock
+            FontSize="20"
+            FontWeight="Bold"
+            Text="Изменить позицию" />
+
+        <StackPanel Grid.Row="1" Margin="0,20,0,0" Spacing="16">
+            <StackPanel Spacing="4">
+                <TextBlock Text="Категория" />
+                <ComboBox
+                    DisplayMemberBinding="{Binding Name}"
+                    ItemsSource="{Binding ProductTypes}"
+                    PlaceholderText="Выберите категорию"
+                    SelectedItem="{Binding SelectedProductType}" />
+            </StackPanel>
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="Продукт" />
+                <ComboBox
+                    DisplayMemberBinding="{Binding Name}"
+                    IsEnabled="{Binding IsProductEnabled}"
+                    ItemsSource="{Binding Products}"
+                    PlaceholderText="Выберите продукт"
+                    SelectedItem="{Binding SelectedProduct}" />
+            </StackPanel>
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="Количество" />
+                <NumericUpDown
+                    Increment="1"
+                    Minimum="0"
+                    Value="{Binding Quantity}" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal"
+            Spacing="12">
+            <Button
+                Command="{Binding SaveCommand}"
+                Content="Сохранить"
+                IsDefault="True" />
+            <Button
+                Click="CancelButton_Click"
+                Content="Отмена"
+                IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</reactive:ReactiveWindow>

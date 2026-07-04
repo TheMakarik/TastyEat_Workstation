@@ -1,6 +1,6 @@
 <Window
     Height="800"
-    Title="TastyEat Workstation"
+    Title="Кушай Вкусно! - Рабочая станция"
     Width="1200"
     x:Class="TastyEat.Workstation.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
@@ -25,7 +25,8 @@
         </Style>
 
         <Style Selector="TabControl.sidebar TabItem">
-            <Setter Property="Width" Value="240" />
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="MaxWidth" Value="320" />
             <Setter Property="Height" Value="56" />
             <Setter Property="Padding" Value="20,0" />
             <Setter Property="FontSize" Value="15" />
@@ -55,9 +56,34 @@
     </Window.Styles>
 
     <TabControl
+        x:Name="MainTabControl"
         Classes="sidebar"
         ItemsSource="{Binding TabItems}"
         SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
+        <TabControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </TabControl.ItemsPanel>
+        <TabControl.Template>
+            <ControlTemplate TargetType="TabControl">
+                <DockPanel>
+                    <ScrollViewer
+                        x:Name="TabScrollViewer"
+                        DockPanel.Dock="Top"
+                        HorizontalScrollBarVisibility="Hidden"
+                        VerticalScrollBarVisibility="Disabled">
+                        <ItemsPresenter
+                            Name="PART_ItemsPresenter"
+                            ItemsPanel="{TemplateBinding ItemsPanel}" />
+                    </ScrollViewer>
+                    <ContentPresenter
+                        Name="PART_SelectedContentHost"
+                        Content="{TemplateBinding SelectedContent}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}" />
+                </DockPanel>
+            </ControlTemplate>
+        </TabControl.Template>
         <TabControl.ItemTemplate>
             <DataTemplate DataType="{x:Type vm:ViewModelBase}">
                 <StackPanel Orientation="Horizontal" Spacing="20">
@@ -86,8 +112,14 @@
                         <DataTemplate DataType="{x:Type vm:ProductionsViewModel}">
                             <views:ProductionsView DataContext="{Binding}" />
                         </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:OrderCollectionViewModel}">
+                            <views:OrderCollectionView DataContext="{Binding}" />
+                        </DataTemplate>
                         <DataTemplate DataType="{x:Type vm:AnalyticsViewModel}">
                             <views:AnalyticsView DataContext="{Binding}" />
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type vm:AdministrationViewModel}">
+                            <views:AdministrationView DataContext="{Binding}" />
                         </DataTemplate>
                     </ContentControl.DataTemplates>
                 </ContentControl>

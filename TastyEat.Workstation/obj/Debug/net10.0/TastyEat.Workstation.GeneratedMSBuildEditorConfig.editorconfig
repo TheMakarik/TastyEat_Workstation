@@ -34,6 +34,9 @@ build_property.EnableCodeStyleSeverity =
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/AdministrationView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/AnalyticsView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
@@ -56,6 +59,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/MainWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/OrderCollectionView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/ProductEditWindow.axaml]

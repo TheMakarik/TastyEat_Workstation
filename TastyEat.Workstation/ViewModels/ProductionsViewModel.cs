@@ -66,7 +66,7 @@ public sealed partial class ProductionsViewModel : ViewModelBase, IDisposable
         _ = SearchAsync();
     }
 
-    public override string Title => "Создание продукции";
+    public override string Title => "Создание/Развод продукции";
     public override string IconName => "Factory";
 
     public ObservableCollection<ProductType> ProductTypes { get; }
@@ -121,6 +121,7 @@ public sealed partial class ProductionsViewModel : ViewModelBase, IDisposable
     [ReactiveCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
     private async Task AddProductionAsync()
     {
+        await RefreshProductTypesAsync();
         _productionEditViewModel.Initialize(ProductTypes);
         var accepted = await AddProductionInteraction.Handle(_productionEditViewModel);
         if (accepted)
@@ -142,6 +143,8 @@ public sealed partial class ProductionsViewModel : ViewModelBase, IDisposable
             _logger.LogWarning("Production item with id {ItemId} not found for editing", node.Id);
             return;
         }
+
+        await RefreshProductTypesAsync();
 
         var productType = ProductTypes.FirstOrDefault(t => t.Id == item.Product!.ProductType.Id);
         _productionItemEditViewModel.Initialize(ProductTypes, productType, item.Product, item.Quantity);
@@ -173,12 +176,26 @@ public sealed partial class ProductionsViewModel : ViewModelBase, IDisposable
         await SearchAsync();
     }
 
+    private async Task RefreshProductTypesAsync(CancellationToken cancellationToken = default)
+    {
+        await using var scope = _scopeFactory.CreateAsyncScope();
+        var productTypeService = scope.ServiceProvider.GetRequiredService<IProductTypeService>();
+        var types = await productTypeService.GetAllAsync(cancellationToken);
+
+        RxApp.MainThreadScheduler.Schedule(() =>
+        {
+            ProductTypes.Clear();
+            foreach (var type in types)
+                ProductTypes.Add(type);
+        });
+    }
+
     private static ProductionNodeViewModel CreateBatchNode(ProductionBatch batch)
     {
         var node = new ProductionNodeViewModel
         {
             Id = batch.Id,
-            Name = $"Развоз номер {batch.Number} - {batch.StartDate:yyyy-MM-dd}",
+            Name = $"Создание продукции {batch.StartDate:yyyy-MM-dd}",
             Kind = ProductionNodeKind.Batch
         };
 

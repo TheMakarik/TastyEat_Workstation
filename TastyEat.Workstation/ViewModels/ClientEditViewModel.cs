@@ -49,6 +49,8 @@ public sealed partial class ClientEditViewModel : ValidatableViewModelBase
     [Reactive]
     private string _title = "Добавить клиента";
 
+    private IReadOnlyList<Client> _existingClients = [];
+
     public ClientEditViewModel(
         IServiceScopeFactory scopeFactory,
         IPhoneValidationService phoneValidationService,
@@ -75,50 +77,41 @@ public sealed partial class ClientEditViewModel : ValidatableViewModelBase
             city => city is not null,
             "Необходимо выбрать город");
 
-        var phoneUniqueObservable = this.WhenAnyValue(vm => vm.PhoneNumber)
-            .Throttle(TimeSpan.FromMilliseconds(500))
-            .DistinctUntilChanged()
-            .SelectMany(phone => Observable.FromAsync(async () =>
+        this.ValidationRule(
+            vm => vm.PhoneNumber,
+            phone =>
             {
-                await using var scope = _scopeFactory.CreateAsyncScope();
-                var clientService = scope.ServiceProvider.GetRequiredService<IClientService>();
                 if (!_phoneValidationService.IsValid(phone))
                     return true;
 
                 var normalized = _phoneValidationService.Normalize(phone!);
-                return await clientService.PhoneExistsAsync(normalized, IsNew ? null : Id);
-            }))
-            .Select(exists => !exists)
-            .ObserveOn(RxApp.MainThreadScheduler);
+                return !_existingClients.Any(c =>
+                    _phoneValidationService.Normalize(c.PhoneNumber) == normalized && c.Id != Id);
+            },
+            "Клиент с таким номером телефона уже существует");
 
-        this.ValidationRule(phoneUniqueObservable, "Клиент с таким номером телефона уже существует");
-
-        var referrerExistsObservable = this.WhenAnyValue(vm => vm.ReferrerSearchText)
-            .Throttle(TimeSpan.FromMilliseconds(500))
-            .DistinctUntilChanged()
-            .SelectMany(text => Observable.FromAsync(async () =>
+        this.ValidationRule(
+            vm => vm.ReferrerSearchText,
+            text =>
             {
                 var trimmed = text?.Trim() ?? string.Empty;
                 if (string.IsNullOrEmpty(trimmed))
                     return true;
 
-                await using var scope = _scopeFactory.CreateAsyncScope();
-                var clientService = scope.ServiceProvider.GetRequiredService<IClientService>();
-                return await clientService.ExistsByFullNameAsync(trimmed);
-            }))
-            .ObserveOn(RxApp.MainThreadScheduler);
-
-        this.ValidationRule(referrerExistsObservable, "Приглашённый клиент с таким ФИО не существует");
+                return Referrers.Any(r => r.FullName == trimmed);
+            },
+            "Приглашённый клиент с таким ФИО не существует");
 
         _canExecute = this.IsValid().ObserveOn(RxApp.MainThreadScheduler);
     }
 
     public bool IsNew => Id == 0;
 
-    public void Initialize(IReadOnlyList<City> cities, IReadOnlyList<Client> referrers, Client? client = null)
+    public void Initialize(IReadOnlyList<City> cities, IReadOnlyList<Client> referrers, IReadOnlyList<Client> existingClients, Client? client = null)
     {
         Cities = cities;
         Referrers = referrers;
+        _existingClients = existingClients;
 
         if (client is null)
         {

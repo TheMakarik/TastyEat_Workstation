@@ -1,0 +1,28 @@
+<reactive:ReactiveUserControl
+    x:Class="TastyEat.Workstation.Views.AdministrationView"
+    x:DataType="vm:AdministrationViewModel"
+    x:TypeArguments="vm:AdministrationViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:controls="using:TastyEat.Workstation.Views.Controls"
+    xmlns:reactive="http://reactiveui.net"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:AdministrationViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="24" RowDefinitions="Auto,*">
+        <controls:SectionHeader
+            Grid.Row="0"
+            IconKind="CogOutline"
+            Subtitle="Настройки и управление системой"
+            Title="Администрирование" />
+
+        <TextBlock
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Margin="0,40,0,0"
+            Text="Раздел в разработке" />
+    </Grid>
+</reactive:ReactiveUserControl>

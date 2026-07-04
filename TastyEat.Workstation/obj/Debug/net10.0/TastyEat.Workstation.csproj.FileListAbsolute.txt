@@ -496,3 +496,4 @@
 /home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/obj/Debug/net10.0/TastyEat.Workstation.pdb
 /home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/obj/Debug/net10.0/TastyEat.Workstation.genruntimeconfig.cache
 /home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/obj/Debug/net10.0/ref/TastyEat.Workstation.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/obj/Debug/net10.0/TastyEat.Workstation.sourcelink.json

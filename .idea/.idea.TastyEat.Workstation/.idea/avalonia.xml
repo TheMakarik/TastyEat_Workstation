@@ -5,16 +5,21 @@
       <map>
         <entry key="TastyEat.Workstation/App.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/AnalyticsView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/CityEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ClientEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ClientsView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/Controls/SectionHeader.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/LoadingWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/MainWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ProductEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/ProductTypeEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ProductionEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/ProductionItemEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/ProductionsView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ProductsView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/Styles/ActionButtonStyles.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/Styles/ButtonStyles.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/Styles/Common.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/Styles/ControlsStyles.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/Styles/ManagementViewStyles.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/Styles/SearchTextBoxStyles.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />

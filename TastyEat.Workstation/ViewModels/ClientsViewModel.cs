@@ -132,7 +132,11 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
     [ReactiveCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
     private async Task AddClientAsync()
     {
-        _clientEditViewModel.Initialize(Cities, Referrers);
+        await using var scope = _scopeFactory.CreateAsyncScope();
+        var clientService = scope.ServiceProvider.GetRequiredService<IClientService>();
+        var existingClients = await clientService.GetAllAsync();
+
+        _clientEditViewModel.Initialize(Cities, Referrers, existingClients);
         var result = await AddClientInteraction.Handle(_clientEditViewModel);
         if (result is not null)
             await SearchAsync();
@@ -159,7 +163,9 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
             return;
         }
 
-        _clientEditViewModel.Initialize(Cities, Referrers, client);
+        var existingClients = await clientService.GetAllAsync();
+
+        _clientEditViewModel.Initialize(Cities, Referrers, existingClients, client);
         var result = await EditClientInteraction.Handle(_clientEditViewModel);
         if (result is not null)
             await SearchAsync();

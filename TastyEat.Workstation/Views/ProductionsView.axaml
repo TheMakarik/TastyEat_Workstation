@@ -17,22 +17,25 @@
 
     <UserControl.Resources>
         <DataTemplate DataType="vm:ProductionNodeViewModel" x:Key="ProductionActionsCellTemplate">
-            <Button Classes="action">
+            <Button
+                Classes="action"
+                x:Name="ActionsButton"
+                Tag="{Binding #Root.DataContext}">
                 <icons:MaterialIcon Kind="Menu" />
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuItem
-                            Command="{Binding #Root.DataContext.EditNodeCommand}"
-                            CommandParameter="{Binding}"
+                            Command="{Binding Tag.EditNodeCommand, ElementName=ActionsButton}"
+                            CommandParameter="{Binding DataContext, ElementName=ActionsButton}"
                             Header="Изменить"
-                            IsVisible="{Binding IsItem}">
+                            IsVisible="{Binding DataContext.IsItem, ElementName=ActionsButton}">
                             <MenuItem.Icon>
                                 <icons:MaterialIcon Kind="Pencil" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem
-                            Command="{Binding #Root.DataContext.DeleteNodeCommand}"
-                            CommandParameter="{Binding}"
+                            Command="{Binding Tag.DeleteNodeCommand, ElementName=ActionsButton}"
+                            CommandParameter="{Binding DataContext, ElementName=ActionsButton}"
                             Header="Удалить">
                             <MenuItem.Icon>
                                 <icons:MaterialIcon Kind="Delete" />

@@ -66,17 +66,14 @@
     <!-- ComboBoxItem -->
     <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource AccentLightBrush}" />
-        <Setter Property="Foreground" Value="White" />
     </Style>
 
     <Style Selector="ComboBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource AccentColor}" />
-        <Setter Property="Foreground" Value="White" />
     </Style>
 
     <Style Selector="ComboBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource AccentLightBrush}" />
-        <Setter Property="Foreground" Value="White" />
     </Style>
 
     <!-- NumericUpDown inner TextBox is covered by TextBox styles above -->

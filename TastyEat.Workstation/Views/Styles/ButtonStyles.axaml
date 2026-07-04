@@ -1,6 +1,4 @@
-<Styles
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style Selector="Button">
         <Setter Property="Background" Value="{DynamicResource AccentColor}" />
@@ -9,8 +7,8 @@
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Transitions">
             <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.15" />
-                <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+                <BrushTransition Duration="0:0:0.15" Property="Background" />
+                <BrushTransition Duration="0:0:0.15" Property="BorderBrush" />
             </Transitions>
         </Setter>
     </Style>
@@ -43,9 +41,9 @@
         <Setter Property="FontWeight" Value="Medium" />
         <Setter Property="Transitions">
             <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.15" />
-                <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
-                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+                <BrushTransition Duration="0:0:0.15" Property="Background" />
+                <BrushTransition Duration="0:0:0.15" Property="BorderBrush" />
+                <TransformOperationsTransition Duration="0:0:0.1" Property="RenderTransform" />
             </Transitions>
         </Setter>
     </Style>
@@ -66,7 +64,7 @@
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Transitions">
             <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.15" />
+                <BrushTransition Duration="0:0:0.15" Property="Background" />
             </Transitions>
         </Setter>
     </Style>
@@ -113,6 +111,7 @@
     </Style>
 
     <Style Selector="Button.action">
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Padding" Value="6" />
@@ -121,7 +120,7 @@
         <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Transitions">
             <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.15" />
+                <BrushTransition Duration="0:0:0.15" Property="Background" />
             </Transitions>
         </Setter>
     </Style>

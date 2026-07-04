@@ -7,14 +7,22 @@ namespace TastyEat.Workstation.ViewModels;
 
 public sealed partial class MainWindowViewModel : ViewModelBase
 {
-    public MainWindowViewModel(ClientsViewModel clients, ProductsViewModel products, ProductionsViewModel productions, AnalyticsViewModel analytics)
+    public MainWindowViewModel(
+        ClientsViewModel clients,
+        ProductsViewModel products,
+        ProductionsViewModel productions,
+        OrderCollectionViewModel orderCollection,
+        AnalyticsViewModel analytics,
+        AdministrationViewModel administration)
     {
         TabItems =
         [
             clients,
             products,
             productions,
-            analytics
+            orderCollection,
+            analytics,
+            administration
         ];
     }
 

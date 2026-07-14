@@ -76,8 +76,7 @@ public sealed class ProductService : IProductService
         var product = new Product
         {
             Name = dto.Name.Trim(),
-            ProductType = type,
-            IsWeighted = dto.IsWeighted
+            ProductType = type
         };
 
         product.Prices.Add(new ProductPrice
@@ -107,7 +106,6 @@ public sealed class ProductService : IProductService
 
         product.Name = dto.Name.Trim();
         product.ProductType = type;
-        product.IsWeighted = dto.IsWeighted;
 
         var activePrice = product.Prices.FirstOrDefault(p => p.EffectiveTo == null);
         if (activePrice is null || activePrice.Price != dto.Price)

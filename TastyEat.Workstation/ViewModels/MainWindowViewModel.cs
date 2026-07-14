@@ -12,7 +12,6 @@ public sealed partial class MainWindowViewModel : ViewModelBase
         ProductsViewModel products,
         ProductionsViewModel productions,
         OrderCollectionViewModel orderCollection,
-        AnalyticsViewModel analytics,
         AdministrationViewModel administration)
     {
         TabItems =
@@ -21,7 +20,6 @@ public sealed partial class MainWindowViewModel : ViewModelBase
             products,
             productions,
             orderCollection,
-            analytics,
             administration
         ];
     }

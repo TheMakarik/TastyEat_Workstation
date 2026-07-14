@@ -30,9 +30,6 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
     private int? _price;
 
     [Reactive]
-    private bool _isWeighted;
-
-    [Reactive]
     private IReadOnlyList<ProductType> _productTypes = [];
 
     [Reactive]
@@ -79,7 +76,6 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
             Name = string.Empty;
             SelectedProductType = productTypes.FirstOrDefault();
             Price = null;
-            IsWeighted = false;
             return;
         }
 
@@ -91,7 +87,6 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
             .Where(p => p.EffectiveTo == null)
             .OrderByDescending(p => p.EffectiveFrom)
             .FirstOrDefault()?.Price;
-        IsWeighted = product.IsWeighted;
     }
 
     [ReactiveCommand(CanExecute = nameof(_canExecute), OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
@@ -105,8 +100,7 @@ public sealed partial class ProductEditViewModel : ValidatableViewModelBase
             Id = Id,
             Name = Name.Trim(),
             ProductTypeId = SelectedProductType?.Id ?? throw new InvalidOperationException("Тип продукта не выбран"),
-            Price = Price ?? throw new InvalidOperationException("Цена не указана"),
-            IsWeighted = IsWeighted
+            Price = Price ?? throw new InvalidOperationException("Цена не указана")
         };
 
         var product = IsNew

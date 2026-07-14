@@ -16,7 +16,7 @@ public sealed partial class ProductionItemEditViewModel : ValidatableViewModelBa
     private Product? _selectedProduct;
 
     [Reactive]
-    private double? _quantity;
+    private int? _quantity;
 
     [Reactive]
     private IReadOnlyList<ProductType> _productTypes = [];
@@ -71,7 +71,7 @@ public sealed partial class ProductionItemEditViewModel : ValidatableViewModelBa
         return ToDto();
     }
 
-    public void Initialize(IReadOnlyList<ProductType> productTypes, ProductType? selectedType = null, Product? selectedProduct = null, double? quantity = null)
+    public void Initialize(IReadOnlyList<ProductType> productTypes, ProductType? selectedType = null, Product? selectedProduct = null, int? quantity = null)
     {
         ProductTypes = productTypes;
         SelectedProductType = selectedType;

@@ -6,5 +6,4 @@ public sealed record ProductEditDto
     public string Name { get; set; } = string.Empty;
     public int ProductTypeId { get; set; }
     public int Price { get; set; }
-    public bool IsWeighted { get; set; }
 }

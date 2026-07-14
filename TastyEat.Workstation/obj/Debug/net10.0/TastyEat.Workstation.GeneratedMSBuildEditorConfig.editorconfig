@@ -37,9 +37,6 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/AdministrationView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
-[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/AnalyticsView.axaml]
-build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
-
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/CityEditWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
@@ -49,10 +46,22 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/ClientsView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/Controls/LoadingControl.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/Controls/SearchTextBox.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/Controls/SectionHeader.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/DistributionDateWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/DistributionEditWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/LineChartWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/LoadingWindow.axaml]
@@ -61,7 +70,13 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/MainWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/OrderCollectionClientEditWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/OrderCollectionView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/PieChartWindow.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/Views/ProductEditWindow.axaml]

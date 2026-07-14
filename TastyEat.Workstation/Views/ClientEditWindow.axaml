@@ -34,7 +34,7 @@
             </StackPanel>
 
             <CheckBox
-                Content="В Telegram канале"
+                Content="В группе"
                 IsChecked="{Binding IsInTelegramChannel}"
                 Margin="0,8,0,0" />
 

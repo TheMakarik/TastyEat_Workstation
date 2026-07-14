@@ -1,12 +1,11 @@
-using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using TastyEat.Workstation.ViewModels;
 
 namespace TastyEat.Workstation.Views;
 
-public partial class AnalyticsView : ReactiveUserControl<AnalyticsViewModel>
+public partial class PieChartWindow : ReactiveWindow<PieChartViewModel>
 {
-    public AnalyticsView()
+    public PieChartWindow()
     {
         InitializeComponent();
     }

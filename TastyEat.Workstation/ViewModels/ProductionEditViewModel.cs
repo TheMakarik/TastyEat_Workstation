@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,13 @@ public sealed partial class ProductionEditViewModel : ValidatableViewModelBase
     private readonly IObservable<bool> _canExecute;
 
     [Reactive]
+    private int _id;
+
+    [Reactive]
     private DateTimeOffset _date;
+
+    [Reactive]
+    private string _title = "Добавить производство";
 
     [Reactive]
     private IReadOnlyList<ProductType> _productTypes = [];
@@ -28,19 +35,44 @@ public sealed partial class ProductionEditViewModel : ValidatableViewModelBase
         Date = DateTimeOffset.Now;
         Rows = new ObservableCollection<ProductionItemEditViewModel>();
 
-        _canExecute = this.WhenAnyValue(vm => vm.Rows)
-            .Select(_ => Rows)
-            .Select(rows => rows.Any())
+        _canExecute = Observable
+            .FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+                h => Rows.CollectionChanged += h,
+                h => Rows.CollectionChanged -= h)
+            .Select(_ => Rows.Any())
+            .StartWith(Rows.Any())
             .ObserveOn(RxApp.MainThreadScheduler);
     }
 
+    public bool IsNew => Id == 0;
+
     public ObservableCollection<ProductionItemEditViewModel> Rows { get; }
 
-    public void Initialize(IReadOnlyList<ProductType> productTypes)
+    public void Initialize(IReadOnlyList<ProductType> productTypes, ProductionBatch? batch = null)
     {
         ProductTypes = productTypes;
         Rows.Clear();
-        AddRow();
+
+        if (batch is null)
+        {
+            Id = 0;
+            Title = "Добавить производство";
+            Date = DateTimeOffset.Now;
+            AddRow();
+            return;
+        }
+
+        Id = batch.Id;
+        Title = $"Изменить производство {batch.StartDate:yyyy-MM-dd}";
+        Date = batch.StartDate;
+
+        foreach (var item in batch.Items)
+        {
+            var row = new ProductionItemEditViewModel();
+            var productType = productTypes.FirstOrDefault(t => t.Id == item.Product!.ProductType.Id);
+            row.Initialize(productTypes, productType, item.Product, (int)item.Quantity);
+            Rows.Add(row);
+        }
     }
 
     [ReactiveCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
@@ -72,7 +104,15 @@ public sealed partial class ProductionEditViewModel : ValidatableViewModelBase
             Items = Rows.Select(r => r.ToDto()).ToList()
         };
 
-        await productionService.CreateAsync(dto);
+        if (IsNew)
+        {
+            await productionService.CreateAsync(dto);
+        }
+        else
+        {
+            await productionService.UpdateBatchAsync(Id, dto);
+        }
+
         return true;
     }
 }

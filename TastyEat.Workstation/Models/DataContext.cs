@@ -12,6 +12,7 @@ public sealed class DataContext : DbContext
     public DataContext(DbContextOptions<DataContext> options, IOptions<StringLengthOptions> stringLengthOptions) : base(options)
     {
         _stringLengthOptions = stringLengthOptions.Value;
+        Database.ExecuteSqlRaw("PRAGMA busy_timeout = 5000;");
     }
 
     public DbSet<Client> Clients { get; set; }
@@ -22,7 +23,12 @@ public sealed class DataContext : DbContext
     public DbSet<ProductionBatch> ProductionBatches { get; set; }
     public DbSet<ProductionBatchItem> ProductionBatchItems { get; set; }
     public DbSet<Distribution> Distributions { get; set; }
+    public DbSet<DistributionClient> DistributionClients { get; set; }
     public DbSet<DistributionItem> DistributionItems { get; set; }
+    public DbSet<OrderCollection> OrderCollections { get; set; }
+    public DbSet<OrderCollectionClient> OrderCollectionClients { get; set; }
+    public DbSet<OrderCollectionItem> OrderCollectionItems { get; set; }
+    public DbSet<ApplicationSetting> ApplicationSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

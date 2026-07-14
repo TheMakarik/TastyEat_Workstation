@@ -14,5 +14,7 @@ public interface IClientService
     Task<bool> PhoneExistsAsync(string phoneNumber, int? excludingId = null, CancellationToken cancellationToken = default);
     Task<bool> ExistsByFullNameAsync(string fullName, CancellationToken cancellationToken = default);
     Task<Client?> GetByFullNameAsync(string fullName, CancellationToken cancellationToken = default);
-    Task<decimal> GetTotalPurchasedAmountAsync(int clientId, CancellationToken cancellationToken = default);
+    Task<int> GetTotalPurchasedAmountAsync(int clientId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<ClientPurchaseShareDto>> GetPurchaseSharesAsync(CancellationToken cancellationToken = default);
+    Task<int> GetInvitedCountAsync(int clientId, CancellationToken cancellationToken = default);
 }

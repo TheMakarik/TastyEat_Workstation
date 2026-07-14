@@ -4,13 +4,17 @@
     <option name="projectPerEditor">
       <map>
         <entry key="TastyEat.Workstation/App.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/AdministrationView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/AnalyticsView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/CityEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ClientEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ClientsView.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/Controls/SectionHeader.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/DistributionEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/LineChartWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/LoadingWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/MainWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
+        <entry key="TastyEat.Workstation/Views/PieChartWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ProductEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ProductTypeEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />
         <entry key="TastyEat.Workstation/Views/ProductionEditWindow.axaml" value="TastyEat.Workstation/TastyEat.Workstation.csproj" />

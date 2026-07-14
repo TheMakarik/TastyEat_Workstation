@@ -27,6 +27,17 @@
             <SolidColorBrush Color="{StaticResource DotNetPurpleColor}" x:Key="AccentColor" />
             <SolidColorBrush Color="#7559E0" x:Key="AccentLightBrush" />
             <SolidColorBrush Color="#E6E1F9" x:Key="AccentPurpleBrush" />
+
+            <Color x:Key="ChartColor1">#512BD4</Color>
+            <Color x:Key="ChartColor2">#E3405F</Color>
+            <Color x:Key="ChartColor3">#F2A93B</Color>
+            <Color x:Key="ChartColor4">#2B95D4</Color>
+            <Color x:Key="ChartColor5">#3BD9A1</Color>
+            <Color x:Key="ChartColor6">#8E44AD</Color>
+            <Color x:Key="ChartColor7">#D35400</Color>
+            <Color x:Key="ChartColor8">#27AE60</Color>
+            <Color x:Key="ChartColor9">#C0392B</Color>
+            <Color x:Key="ChartColor10">#16A085</Color>
         </ResourceDictionary>
     </Application.Resources>
 

@@ -32,8 +32,12 @@ public sealed partial class ProductTypeEditViewModel : ValidatableViewModelBase
 
         this.ValidationRule(
             vm => vm.Name,
-            name => !string.IsNullOrWhiteSpace(name)
-                    && name.Length <= _stringLengthOptions.ProductTypeNameMaxLength,
+            name => !string.IsNullOrWhiteSpace(name),
+            "Тип не должен быть пустым");
+
+        this.ValidationRule(
+            vm => vm.Name,
+            name => string.IsNullOrWhiteSpace(name) || name.Length <= _stringLengthOptions.ProductTypeNameMaxLength,
             $"Название типа не должно превышать {_stringLengthOptions.ProductTypeNameMaxLength} символов");
 
         var nameUniqueObservable = this.WhenAnyValue(vm => vm.Name)

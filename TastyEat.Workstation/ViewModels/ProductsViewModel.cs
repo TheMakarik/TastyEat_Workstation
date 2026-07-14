@@ -20,6 +20,7 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
     private readonly ProductTypeEditViewModel _productTypeEditViewModel;
     private readonly ProductEditViewModel _productEditViewModel;
     private readonly ILogger<ProductsViewModel> _logger;
+    private readonly LoadingControlViewModel _loading;
     private CancellationTokenSource? _loadCts;
     private bool _disposed;
 
@@ -33,11 +34,13 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
         IServiceScopeFactory scopeFactory,
         ProductTypeEditViewModel productTypeEditViewModel,
         ProductEditViewModel productEditViewModel,
+        LoadingControlViewModel loading,
         ILogger<ProductsViewModel> logger)
     {
         _scopeFactory = scopeFactory;
         _productTypeEditViewModel = productTypeEditViewModel;
         _productEditViewModel = productEditViewModel;
+        _loading = loading;
         _logger = logger;
 
         ProductTypes = new ObservableCollection<ProductType>();
@@ -70,6 +73,7 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
     public ObservableCollection<ProductType> ProductTypes { get; }
     public ObservableCollection<ProductNodeViewModel> ProductNodes { get; }
     public HierarchicalTreeDataGridSource<ProductNodeViewModel> ProductsSource { get; }
+    public LoadingControlViewModel Loading => _loading;
 
     public Interaction<ProductTypeEditViewModel, bool> AddProductTypeInteraction { get; } = new();
     public Interaction<ProductTypeEditViewModel, bool> EditProductTypeInteraction { get; } = new();
@@ -81,15 +85,19 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
     private async Task SearchAsync()
     {
         var token = RefreshLoadCts();
-        await using var scope = _scopeFactory.CreateAsyncScope();
-        var productService = scope.ServiceProvider.GetRequiredService<IProductService>();
-        var productTypeService = scope.ServiceProvider.GetRequiredService<IProductTypeService>();
 
-        IsLoading = true;
+        _loading.IsLoading = true;
         try
         {
-            var types = await productService.SearchAsync(SearchText, token);
-            var allTypes = await productTypeService.GetAllAsync(token);
+            var (types, allTypes) = await Task.Factory.StartNew(async () =>
+            {
+                await using var scope = _scopeFactory.CreateAsyncScope();
+                var productService = scope.ServiceProvider.GetRequiredService<IProductService>();
+                var productTypeService = scope.ServiceProvider.GetRequiredService<IProductTypeService>();
+                var loadedTypes = await productService.SearchAsync(SearchText, token);
+                var loadedAllTypes = await productTypeService.GetAllAsync(token);
+                return (loadedTypes, loadedAllTypes);
+            }, token, TaskCreationOptions.LongRunning, TaskScheduler.Default).Unwrap();
 
             RxApp.MainThreadScheduler.Schedule(() =>
             {
@@ -114,7 +122,7 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
         }
         finally
         {
-            RxApp.MainThreadScheduler.Schedule(() => IsLoading = false);
+            RxApp.MainThreadScheduler.Schedule(() => _loading.IsLoading = false);
         }
     }
 
@@ -217,8 +225,7 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
         {
             Id = product.Id,
             Name = product.Name,
-            Kind = ProductNodeKind.Product,
-            IsWeighted = product.IsWeighted
+            Kind = ProductNodeKind.Product
         };
 
         var currentPrice = product.Prices

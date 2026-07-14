@@ -19,30 +19,11 @@
         <DataTemplate DataType="vm:ProductionNodeViewModel" x:Key="ProductionActionsCellTemplate">
             <Button
                 Classes="action"
-                x:Name="ActionsButton"
-                Tag="{Binding #Root.DataContext}">
+                Click="OnActionsButtonClick"
+                IsEnabled="True"
+                IsHitTestVisible="True"
+                Tag="{Binding}">
                 <icons:MaterialIcon Kind="Menu" />
-                <Button.Flyout>
-                    <MenuFlyout>
-                        <MenuItem
-                            Command="{Binding Tag.EditNodeCommand, ElementName=ActionsButton}"
-                            CommandParameter="{Binding DataContext, ElementName=ActionsButton}"
-                            Header="Изменить"
-                            IsVisible="{Binding DataContext.IsItem, ElementName=ActionsButton}">
-                            <MenuItem.Icon>
-                                <icons:MaterialIcon Kind="Pencil" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem
-                            Command="{Binding Tag.DeleteNodeCommand, ElementName=ActionsButton}"
-                            CommandParameter="{Binding DataContext, ElementName=ActionsButton}"
-                            Header="Удалить">
-                            <MenuItem.Icon>
-                                <icons:MaterialIcon Kind="Delete" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuFlyout>
-                </Button.Flyout>
             </Button>
         </DataTemplate>
     </UserControl.Resources>
@@ -53,12 +34,12 @@
         <controls:SectionHeader
             Grid.Row="0"
             IconKind="Factory"
-            Subtitle="Учёт произведённой продукции"
-            Title="Создание продукции" />
+            Subtitle="Учёт произведённой и развезённой продукции"
+            Title="Производство и развод продукции" />
 
         <Grid
             Classes="topbar"
-            ColumnDefinitions="*,Auto"
+            ColumnDefinitions="*,Auto,Auto"
             Grid.Row="1">
             <controls:SearchTextBox
                 Grid.Column="0"
@@ -72,7 +53,18 @@
                 Grid.Column="1">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <icons:MaterialIcon Kind="Plus" />
-                    <TextBlock Text="Добавить продукцию" VerticalAlignment="Center" />
+                    <TextBlock Text="Добавить запись о создании продукции" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+
+            <Button
+                Classes="sidebarAction"
+                Command="{Binding AddDistributionCommand}"
+                Grid.Column="2"
+                Margin="12,0,0,0">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <icons:MaterialIcon Kind="TruckDelivery" />
+                    <TextBlock Text="Добавить запись о развозе" VerticalAlignment="Center" />
                 </StackPanel>
             </Button>
         </Grid>
@@ -80,5 +72,10 @@
         <Border Classes="dataGridHost" Grid.Row="2">
             <TreeDataGrid Source="{Binding ProductionsSource}" />
         </Border>
+
+        <controls:LoadingControl
+            DataContext="{Binding Loading}"
+            Grid.Row="0"
+            Grid.RowSpan="3" />
     </Grid>
 </reactive:ReactiveUserControl>

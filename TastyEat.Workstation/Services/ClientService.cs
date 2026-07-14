@@ -140,32 +140,40 @@ public sealed class ClientService : IClientService
             .FirstOrDefaultAsync(c => c.FullName == normalized, cancellationToken);
     }
 
-    public async Task<decimal> GetTotalPurchasedAmountAsync(int clientId, CancellationToken cancellationToken = default)
+    public async Task<int> GetTotalPurchasedAmountAsync(int clientId, CancellationToken cancellationToken = default)
     {
-        var items = await _context.DistributionItems
+        return await _context.DistributionClients
             .AsNoTracking()
-            .Where(di => di.Client.Id == clientId)
-            .Include(di => di.Distribution)
-            .Include(di => di.Product)
-            .ThenInclude(p => p.Prices)
+            .Where(dc => dc.Client.Id == clientId)
+            .SumAsync(dc => (int?)dc.TotalAmount, cancellationToken) ?? 0;
+    }
+
+    public async Task<IReadOnlyList<ClientPurchaseShareDto>> GetPurchaseSharesAsync(CancellationToken cancellationToken = default)
+    {
+        var clients = await _context.Clients
+            .AsNoTracking()
+            .OrderBy(c => c.FullName)
             .ToListAsync(cancellationToken);
 
-        decimal total = 0;
-        foreach (var item in items)
+        var result = new List<ClientPurchaseShareDto>();
+        foreach (var client in clients)
         {
-            var price = item.PriceAtDistribution ?? 0;
-            if (price == 0)
-            {
-                var matchingPrice = item.Product.Prices
-                    .FirstOrDefault(p => item.Distribution.Date >= p.EffectiveFrom &&
-                                         (p.EffectiveTo == null || item.Distribution.Date <= p.EffectiveTo));
-                price = matchingPrice?.Price ?? 0;
-            }
+            var total = await _context.DistributionClients
+                .AsNoTracking()
+                .Where(dc => dc.Client.Id == client.Id)
+                .SumAsync(dc => (int?)dc.TotalAmount, cancellationToken) ?? 0;
 
-            total += (decimal)item.Quantity * price;
+            result.Add(new ClientPurchaseShareDto(client.Id, client.FullName, total));
         }
 
-        return total;
+        return result;
+    }
+
+    public async Task<int> GetInvitedCountAsync(int clientId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Clients
+            .AsNoTracking()
+            .CountAsync(c => c.Referrer != null && c.Referrer.Id == clientId, cancellationToken);
     }
 
     private IQueryable<Client> QueryClients()

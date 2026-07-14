@@ -4,6 +4,7 @@
     x:TypeArguments="vm:AdministrationViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:controls="using:TastyEat.Workstation.Views.Controls"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:reactive="http://reactiveui.net"
     xmlns:vm="using:TastyEat.Workstation.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
@@ -19,10 +20,31 @@
             Subtitle="Настройки и управление системой"
             Title="Администрирование" />
 
-        <TextBlock
+        <StackPanel
             Grid.Row="1"
-            HorizontalAlignment="Center"
-            Margin="0,40,0,0"
-            Text="Раздел в разработке" />
+            HorizontalAlignment="Left"
+            Margin="0,16,0,0"
+            Orientation="Horizontal"
+            Spacing="12"
+            VerticalAlignment="Top">
+            <Button Classes="accent" Command="{Binding CreateBackupCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <icons:MaterialIcon Kind="ContentSave" />
+                    <TextBlock Text="Создать бекап" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button Classes="sidebarAction" Command="{Binding RestoreBackupCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <icons:MaterialIcon Kind="BackupRestore" />
+                    <TextBlock Text="Загрузить бекап" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button Classes="sidebarAction" Command="{Binding OpenLogsFolderCommand}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <icons:MaterialIcon Kind="FolderOpen" />
+                    <TextBlock Text="Открыть папку с логами" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
     </Grid>
 </reactive:ReactiveUserControl>

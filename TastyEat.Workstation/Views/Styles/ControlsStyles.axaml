@@ -1,5 +1,6 @@
 <Styles
     xmlns="https://github.com/avaloniaui"
+    xmlns:models="using:TastyEat.Workstation.Models.Tables"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- TextBox -->
@@ -76,7 +77,40 @@
         <Setter Property="Background" Value="{DynamicResource AccentLightBrush}" />
     </Style>
 
-    <!-- NumericUpDown inner TextBox is covered by TextBox styles above -->
+    <!-- AutoCompleteBox -->
+    <Style Selector="AutoCompleteBox">
+        <Setter Property="Foreground" Value="#333333" />
+        <Setter Property="PlaceholderForeground" Value="#666666" />
+        <Setter Property="IsTextCompletionEnabled" Value="False" />
+        <Setter Property="ItemTemplate">
+            <DataTemplate DataType="models:Client">
+                <TextBlock Foreground="#333333" Text="{Binding FullName}" />
+            </DataTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="AutoCompleteBox:focus">
+        <Setter Property="Foreground" Value="#333333" />
+        <Setter Property="PlaceholderForeground" Value="#666666" />
+    </Style>
+
+    <Style Selector="AutoCompleteBox /template/ TextBox#PART_TextBox">
+        <Setter Property="Foreground" Value="#333333" />
+    </Style>
+
+    <Style Selector="AutoCompleteBox /template/ TextBox#PART_TextBox:focus">
+        <Setter Property="Foreground" Value="#333333" />
+    </Style>
+
+    <Style Selector="AutoCompleteBox /template/ TextBox#PART_TextBox:disabled">
+        <Setter Property="Foreground" Value="#333333" />
+    </Style>
+
+    <!-- NumericUpDown: spinner buttons work, keyboard input disabled -->
+    <Style Selector="NumericUpDown /template/ TextBox#PART_TextBox">
+        <Setter Property="IsReadOnly" Value="True" />
+    </Style>
+
     <Style Selector="NumericUpDown /template/ ButtonSpinner#PART_Spinner">
         <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
     </Style>

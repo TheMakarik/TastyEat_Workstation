@@ -497,3 +497,13 @@
 /home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/obj/Debug/net10.0/TastyEat.Workstation.genruntimeconfig.cache
 /home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/obj/Debug/net10.0/ref/TastyEat.Workstation.dll
 /home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/obj/Debug/net10.0/TastyEat.Workstation.sourcelink.json
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/Serilog.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/Serilog.Extensions.Hosting.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/Serilog.Extensions.Logging.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/Serilog.Sinks.File.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/Serilog.Sinks.Console.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/LiveChartsCore.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/LiveChartsCore.SkiaSharpView.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/LiveChartsCore.SkiaSharpView.Avalonia.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/SkiaSharp.HarfBuzz.dll
+/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/bin/Debug/net10.0/SharpCompress.dll

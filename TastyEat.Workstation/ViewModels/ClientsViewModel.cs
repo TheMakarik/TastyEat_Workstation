@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using ReactiveUI.SourceGenerators;
+using TastyEat.Workstation.Messages;
 using TastyEat.Workstation.Models.Tables;
 using TastyEat.Workstation.Services.Interfaces;
 
@@ -19,7 +20,10 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ClientEditViewModel _clientEditViewModel;
     private readonly CityEditViewModel _cityEditViewModel;
+    private readonly PieChartViewModel _pieChartViewModel;
+    private readonly LineChartViewModel _lineChartViewModel;
     private readonly ILogger<ClientsViewModel> _logger;
+    private readonly LoadingControlViewModel _loading;
     private CancellationTokenSource? _loadCts;
     private bool _disposed;
 
@@ -33,11 +37,17 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
         IServiceScopeFactory scopeFactory,
         ClientEditViewModel clientEditViewModel,
         CityEditViewModel cityEditViewModel,
+        PieChartViewModel pieChartViewModel,
+        LineChartViewModel lineChartViewModel,
+        LoadingControlViewModel loading,
         ILogger<ClientsViewModel> logger)
     {
         _scopeFactory = scopeFactory;
         _clientEditViewModel = clientEditViewModel;
         _cityEditViewModel = cityEditViewModel;
+        _pieChartViewModel = pieChartViewModel;
+        _lineChartViewModel = lineChartViewModel;
+        _loading = loading;
         _logger = logger;
 
         Clients = new ObservableCollection<ClientRowViewModel>();
@@ -54,6 +64,7 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
                 new TemplateColumn<ClientRowViewModel>("Город", "CityCellTemplate", width: new GridLength(1, GridUnitType.Star)),
                 new TemplateColumn<ClientRowViewModel>("Приглашён", "ReferrerCellTemplate", width: new GridLength(1, GridUnitType.Star)),
                 new TextColumn<ClientRowViewModel, string>("Купил на сумму", x => x.TotalAmountText, new GridLength(1, GridUnitType.Star)),
+                new TextColumn<ClientRowViewModel, string>("Всего пригласил(а)", x => x.InvitedCountText, new GridLength(1, GridUnitType.Star)),
                 new TemplateColumn<ClientRowViewModel>(string.Empty, "ActionsCellTemplate", width: GridLength.Auto),
             }
         };
@@ -63,6 +74,10 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
             .DistinctUntilChanged()
             .Select(_ => Unit.Default)
             .InvokeCommand(SearchCommand);
+
+        MessageBus.Current.Listen<ClientPurchasesChangedMessage>()
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(async _ => await SearchAsync());
 
         _ = SearchAsync();
     }
@@ -74,29 +89,36 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
     public ObservableCollection<City> Cities { get; }
     public ObservableCollection<Client> Referrers { get; }
     public FlatTreeDataGridSource<ClientRowViewModel> ClientsSource { get; }
+    public LoadingControlViewModel Loading => _loading;
 
     public Interaction<ClientEditViewModel, ClientEditResult?> AddClientInteraction { get; } = new();
     public Interaction<ClientEditViewModel, ClientEditResult?> EditClientInteraction { get; } = new();
     public Interaction<ClientRowViewModel, bool> ConfirmDeleteInteraction { get; } = new();
     public Interaction<ClientRowViewModel, Unit> ShowStatisticsInteraction { get; } = new();
     public Interaction<CityEditViewModel, bool> AddCityInteraction { get; } = new();
+    public Interaction<PieChartViewModel, Unit> ShowPieChartInteraction { get; } = new();
+    public Interaction<LineChartViewModel, Unit> ShowLineChartInteraction { get; } = new();
 
     [ReactiveCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
     private async Task SearchAsync()
     {
         var token = RefreshLoadCts();
-        await using var scope = _scopeFactory.CreateAsyncScope();
-        var clientService = scope.ServiceProvider.GetRequiredService<IClientService>();
-        var cityService = scope.ServiceProvider.GetRequiredService<ICityService>();
 
-        IsLoading = true;
+        _loading.IsLoading = true;
         try
         {
             foreach (var client in Clients)
                 client.CancelLoading();
 
-            var cities = await cityService.GetAllAsync(token);
-            var clients = await clientService.SearchAsync(SearchText, token);
+            var (cities, clients) = await Task.Factory.StartNew(async () =>
+            {
+                await using var scope = _scopeFactory.CreateAsyncScope();
+                var clientService = scope.ServiceProvider.GetRequiredService<IClientService>();
+                var cityService = scope.ServiceProvider.GetRequiredService<ICityService>();
+                var loadedCities = await cityService.GetAllAsync(token);
+                var loadedClients = await clientService.SearchAsync(SearchText, token);
+                return (loadedCities, loadedClients);
+            }, token, TaskCreationOptions.LongRunning, TaskScheduler.Default).Unwrap();
 
             RxApp.MainThreadScheduler.Schedule(() =>
             {
@@ -125,7 +147,7 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
         }
         finally
         {
-            RxApp.MainThreadScheduler.Schedule(() => IsLoading = false);
+            RxApp.MainThreadScheduler.Schedule(() => _loading.IsLoading = false);
         }
     }
 
@@ -148,6 +170,126 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
         var accepted = await AddCityInteraction.Handle(_cityEditViewModel);
         if (accepted)
             await SearchAsync();
+    }
+
+    [ReactiveCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
+    private async Task ShowClientShareChartAsync()
+    {
+        _pieChartViewModel.Loading.IsLoading = true;
+        try
+        {
+            var shares = await Task.Factory.StartNew(async () =>
+            {
+                await using var scope = _scopeFactory.CreateAsyncScope();
+                var clientService = scope.ServiceProvider.GetRequiredService<IClientService>();
+                return await clientService.GetPurchaseSharesAsync();
+            }, TaskCreationOptions.LongRunning).Unwrap();
+
+            RxApp.MainThreadScheduler.Schedule(() =>
+            {
+                _pieChartViewModel.ChartTitle = "Доля клиентов";
+                _pieChartViewModel.LoadShares(shares);
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load client share chart");
+        }
+        finally
+        {
+            RxApp.MainThreadScheduler.Schedule(() => _pieChartViewModel.Loading.IsLoading = false);
+        }
+
+        await ShowPieChartInteraction.Handle(_pieChartViewModel);
+    }
+
+    [ReactiveCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
+    private async Task ShowCollectionStatisticChartAsync()
+    {
+        _lineChartViewModel.Loading.IsLoading = true;
+        try
+        {
+            var statistics = await Task.Factory.StartNew(async () =>
+            {
+                await using var scope = _scopeFactory.CreateAsyncScope();
+                var orderService = scope.ServiceProvider.GetRequiredService<IOrderCollectionService>();
+                return await orderService.GetCollectionStatisticsAsync();
+            }, TaskCreationOptions.LongRunning).Unwrap();
+
+            RxApp.MainThreadScheduler.Schedule(() => _lineChartViewModel.LoadCollectionStatistics(statistics));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load collection statistic chart");
+        }
+        finally
+        {
+            RxApp.MainThreadScheduler.Schedule(() => _lineChartViewModel.Loading.IsLoading = false);
+        }
+
+        await ShowLineChartInteraction.Handle(_lineChartViewModel);
+    }
+
+    [ReactiveCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
+    private async Task ShowClientProductShareChartAsync(ClientRowViewModel row)
+    {
+        _pieChartViewModel.Loading.IsLoading = true;
+        try
+        {
+            var shares = await Task.Factory.StartNew(async () =>
+            {
+                await using var scope = _scopeFactory.CreateAsyncScope();
+                var distributionService = scope.ServiceProvider.GetRequiredService<IDistributionService>();
+                return await distributionService.GetClientProductSharesAsync(row.Id);
+            }, TaskCreationOptions.LongRunning).Unwrap();
+
+            RxApp.MainThreadScheduler.Schedule(() =>
+            {
+                _pieChartViewModel.ChartTitle = $"Купленные товары — {row.FullName}";
+                _pieChartViewModel.LoadProductShares(shares);
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load client product share chart");
+        }
+        finally
+        {
+            RxApp.MainThreadScheduler.Schedule(() => _pieChartViewModel.Loading.IsLoading = false);
+        }
+
+        await ShowPieChartInteraction.Handle(_pieChartViewModel);
+    }
+
+    [ReactiveCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
+    private async Task ShowClientPurchaseHistoryChartAsync(ClientRowViewModel row)
+    {
+        _lineChartViewModel.Loading.IsLoading = true;
+        try
+        {
+            var history = await Task.Factory.StartNew(async () =>
+            {
+                await using var scope = _scopeFactory.CreateAsyncScope();
+                var distributionService = scope.ServiceProvider.GetRequiredService<IDistributionService>();
+                return await distributionService.GetClientPurchaseHistoryAsync(row.Id);
+            }, TaskCreationOptions.LongRunning).Unwrap();
+
+            RxApp.MainThreadScheduler.Schedule(() =>
+            {
+                _lineChartViewModel.ChartTitle = $"График покупок — {row.FullName}";
+                _lineChartViewModel.LoadPurchaseHistory(history);
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to load client purchase history chart");
+        }
+        finally
+        {
+            RxApp.MainThreadScheduler.Schedule(() => _lineChartViewModel.Loading.IsLoading = false);
+        }
+
+        await ShowLineChartInteraction.Handle(_lineChartViewModel);
     }
 
     [ReactiveCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
@@ -200,7 +342,7 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
             Referrer = client.Referrer
         };
         row.SetContext(Cities, Referrers);
-        row.StartLoadingTotalAmount();
+        row.StartLoadingDetails();
         return row;
     }
 

@@ -1,0 +1,113 @@
+<reactive:ReactiveWindow
+    CanResize="False"
+    Height="720"
+    Title="{Binding Title}"
+    Width="720"
+    WindowStartupLocation="CenterOwner"
+    x:Class="TastyEat.Workstation.Views.OrderCollectionClientEditWindow"
+    x:DataType="vm:OrderCollectionClientEditViewModel"
+    x:TypeArguments="vm:OrderCollectionClientEditViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:reactive="http://reactiveui.net"
+    xmlns:vm="using:TastyEat.Workstation.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Design.DataContext>
+        <vm:OrderCollectionClientEditViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="24" RowDefinitions="Auto,Auto,*,Auto">
+        <TextBlock
+            FontSize="20"
+            FontWeight="Bold"
+            Text="{Binding Title}" />
+
+        <StackPanel Grid.Row="1" Margin="0,20,0,0" Spacing="12">
+            <StackPanel Spacing="4">
+                <TextBlock Text="Клиент" />
+                <AutoCompleteBox
+                    ItemsSource="{Binding Clients}"
+                    MinimumPrefixLength="1"
+                    PlaceholderText="Начните вводить ФИО"
+                    SelectedItem="{Binding SelectedClient}"
+                    Text="{Binding ClientSearchText}"
+                    ValueMemberBinding="{Binding FullName}" />
+            </StackPanel>
+
+            <CheckBox
+                Content="Показывать только произведённую продукцию"
+                IsChecked="{Binding ShowOnlyProducedProducts}" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2" Margin="0,20,0,0">
+            <ItemsControl ItemsSource="{Binding Groups}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:OrderCollectionProductGroupViewModel">
+                        <StackPanel IsVisible="{Binding IsVisible}" Spacing="8">
+                            <Border
+                                Background="#F5F5F5"
+                                CornerRadius="8"
+                                Margin="12,8,12,4"
+                                Padding="12,6">
+                                <TextBlock
+                                    FontWeight="SemiBold"
+                                    HorizontalAlignment="Center"
+                                    Text="{Binding ProductType.Name}" />
+                            </Border>
+
+                            <ItemsControl ItemsSource="{Binding Rows}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate DataType="vm:OrderCollectionProductRowViewModel">
+                                        <Grid
+                                            ColumnDefinitions="*,Auto,Auto,Auto"
+                                            IsVisible="{Binding IsVisible}"
+                                            Margin="24,4,24,4"
+                                            VerticalAlignment="Center">
+                                            <TextBlock
+                                                Grid.Column="0"
+                                                Text="{Binding Product.Name}"
+                                                VerticalAlignment="Center" />
+                                            <NumericUpDown
+                                                Grid.Column="1"
+                                                Increment="1"
+                                                Maximum="{Binding AvailableStock}"
+                                                Minimum="0"
+                                                Value="{Binding OrderedQuantity}"
+                                                Width="120" />
+                                            <TextBlock
+                                                Grid.Column="2"
+                                                Margin="16,0,0,0"
+                                                Text="Осталось:"
+                                                VerticalAlignment="Center" />
+                                            <TextBlock
+                                                Grid.Column="3"
+                                                Margin="4,0,0,0"
+                                                Text="{Binding RemainingStock}"
+                                                VerticalAlignment="Center" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel
+            Grid.Row="3"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal"
+            Spacing="12">
+            <Button
+                Command="{Binding SaveCommand}"
+                Content="Сохранить"
+                IsDefault="True" />
+            <Button
+                Click="CancelButton_Click"
+                Content="Отмена"
+                IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</reactive:ReactiveWindow>

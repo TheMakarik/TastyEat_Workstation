@@ -17,6 +17,25 @@ namespace TastyEat.Workstation.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.9");
 
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.ApplicationSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationSettings");
+                });
+
             modelBuilder.Entity("TastyEat.Workstation.Models.Tables.City", b =>
                 {
                     b.Property<int>("Id")
@@ -92,7 +111,7 @@ namespace TastyEat.Workstation.Migrations
                     b.ToTable("Distributions");
                 });
 
-            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.DistributionItem", b =>
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.DistributionClient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,7 +123,28 @@ namespace TastyEat.Workstation.Migrations
                     b.Property<int>("DistributionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("PriceAtDistribution")
+                    b.Property<int>("TotalAmount")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("DistributionId");
+
+                    b.ToTable("DistributionClients");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.DistributionItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DistributionClientId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductId")
@@ -117,11 +157,73 @@ namespace TastyEat.Workstation.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("DistributionId");
+                    b.HasIndex("DistributionClientId");
 
                     b.HasIndex("ProductId");
 
                     b.ToTable("DistributionItems");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.OrderCollection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderCollections");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.OrderCollectionClient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderCollectionId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("OrderCollectionId");
+
+                    b.ToTable("OrderCollectionClients");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.OrderCollectionItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderCollectionClientId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderCollectionClientId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderCollectionItems");
                 });
 
             modelBuilder.Entity("TastyEat.Workstation.Models.Tables.Product", b =>
@@ -258,17 +360,34 @@ namespace TastyEat.Workstation.Migrations
                     b.Navigation("Referrer");
                 });
 
-            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.DistributionItem", b =>
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.DistributionClient", b =>
                 {
                     b.HasOne("TastyEat.Workstation.Models.Tables.Client", "Client")
-                        .WithMany("DistributionItems")
+                        .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TastyEat.Workstation.Models.Tables.Distribution", "Distribution")
-                        .WithMany("Items")
+                        .WithMany("Clients")
                         .HasForeignKey("DistributionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Distribution");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.DistributionItem", b =>
+                {
+                    b.HasOne("TastyEat.Workstation.Models.Tables.Client", null)
+                        .WithMany("DistributionItems")
+                        .HasForeignKey("ClientId");
+
+                    b.HasOne("TastyEat.Workstation.Models.Tables.DistributionClient", "DistributionClient")
+                        .WithMany("Items")
+                        .HasForeignKey("DistributionClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -278,9 +397,45 @@ namespace TastyEat.Workstation.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("DistributionClient");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.OrderCollectionClient", b =>
+                {
+                    b.HasOne("TastyEat.Workstation.Models.Tables.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TastyEat.Workstation.Models.Tables.OrderCollection", "OrderCollection")
+                        .WithMany("Clients")
+                        .HasForeignKey("OrderCollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Client");
 
-                    b.Navigation("Distribution");
+                    b.Navigation("OrderCollection");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.OrderCollectionItem", b =>
+                {
+                    b.HasOne("TastyEat.Workstation.Models.Tables.OrderCollectionClient", "OrderCollectionClient")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderCollectionClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TastyEat.Workstation.Models.Tables.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrderCollectionClient");
 
                     b.Navigation("Product");
                 });
@@ -339,6 +494,21 @@ namespace TastyEat.Workstation.Migrations
                 });
 
             modelBuilder.Entity("TastyEat.Workstation.Models.Tables.Distribution", b =>
+                {
+                    b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.DistributionClient", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.OrderCollection", b =>
+                {
+                    b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.OrderCollectionClient", b =>
                 {
                     b.Navigation("Items");
                 });

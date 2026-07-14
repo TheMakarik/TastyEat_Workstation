@@ -1,7 +1,10 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
+using Material.Icons;
+using Material.Icons.Avalonia;
 using ReactiveUI;
 using TastyEat.Workstation.ViewModels;
 
@@ -19,6 +22,8 @@ public partial class ClientsView : ReactiveUserControl<ClientsViewModel>
             ViewModel?.ConfirmDeleteInteraction.RegisterHandler(async interaction => await DoConfirmDeleteAsync(interaction)).DisposeWith(disposables);
             ViewModel?.ShowStatisticsInteraction.RegisterHandler(async interaction => await DoShowStatisticsAsync(interaction)).DisposeWith(disposables);
             ViewModel?.AddCityInteraction.RegisterHandler(async interaction => await DoAddCityAsync(interaction)).DisposeWith(disposables);
+            ViewModel?.ShowPieChartInteraction.RegisterHandler(async interaction => await DoShowPieChartAsync(interaction)).DisposeWith(disposables);
+            ViewModel?.ShowLineChartInteraction.RegisterHandler(async interaction => await DoShowLineChartAsync(interaction)).DisposeWith(disposables);
         });
     }
 
@@ -94,7 +99,6 @@ public partial class ClientsView : ReactiveUserControl<ClientsViewModel>
 
     private Task DoShowStatisticsAsync(IInteractionContext<ClientRowViewModel, Unit> interaction)
     {
-        // TODO: implement statistics window
         interaction.SetOutput(Unit.Default);
         return Task.CompletedTask;
     }
@@ -105,5 +109,71 @@ public partial class ClientsView : ReactiveUserControl<ClientsViewModel>
         var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
         var result = await window.ShowDialog<bool>(owner);
         interaction.SetOutput(result);
+    }
+
+    private async Task DoShowPieChartAsync(IInteractionContext<PieChartViewModel, Unit> interaction)
+    {
+        var window = new PieChartWindow { DataContext = interaction.Input };
+        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
+        await window.ShowDialog(owner);
+        interaction.SetOutput(Unit.Default);
+    }
+
+    private async Task DoShowLineChartAsync(IInteractionContext<LineChartViewModel, Unit> interaction)
+    {
+        var window = new LineChartWindow { DataContext = interaction.Input };
+        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
+        await window.ShowDialog(owner);
+        interaction.SetOutput(Unit.Default);
+    }
+
+    private void OnActionsButtonClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not ClientRowViewModel row || ViewModel is null)
+            return;
+
+        var flyout = new MenuFlyout();
+
+        flyout.Items.Add(new MenuItem
+        {
+            Header = "Изменить клиента",
+            Icon = new MaterialIcon { Kind = MaterialIconKind.Pencil },
+            Command = ViewModel.EditClientCommand,
+            CommandParameter = row
+        });
+
+        flyout.Items.Add(new MenuItem
+        {
+            Header = "Открыть статистику клиента",
+            Icon = new MaterialIcon { Kind = MaterialIconKind.ChartBox },
+            Command = ViewModel.ShowStatisticsCommand,
+            CommandParameter = row
+        });
+
+        flyout.Items.Add(new MenuItem
+        {
+            Header = "Диаграмма купленных товаров",
+            Icon = new MaterialIcon { Kind = MaterialIconKind.ChartPie },
+            Command = ViewModel.ShowClientProductShareChartCommand,
+            CommandParameter = row
+        });
+
+        flyout.Items.Add(new MenuItem
+        {
+            Header = "График покупок",
+            Icon = new MaterialIcon { Kind = MaterialIconKind.ChartLine },
+            Command = ViewModel.ShowClientPurchaseHistoryChartCommand,
+            CommandParameter = row
+        });
+
+        flyout.Items.Add(new MenuItem
+        {
+            Header = "Удалить клиента",
+            Icon = new MaterialIcon { Kind = MaterialIconKind.Delete },
+            Command = ViewModel.DeleteClientCommand,
+            CommandParameter = row
+        });
+
+        flyout.ShowAt(button);
     }
 }

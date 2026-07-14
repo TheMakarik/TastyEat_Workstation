@@ -11,7 +11,7 @@
         Text="{Binding Text, RelativeSource={RelativeSource AncestorType=controls:SearchTextBox}, Mode=TwoWay}">
         <TextBox.InnerLeftContent>
             <icons:MaterialIcon
-                Foreground="{Binding #searchTextBox.BorderBrush}"
+                x:Name="SearchIcon"
                 Kind="Magnify" />
         </TextBox.InnerLeftContent>
     </TextBox>

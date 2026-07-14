@@ -7,13 +7,18 @@ namespace TastyEat.Workstation.ViewModels;
 public enum ProductionNodeKind
 {
     Batch,
-    Item
+    Item,
+    Distribution,
+    DistributionClient
 }
 
 public sealed partial class ProductionNodeViewModel : ReactiveObject
 {
     [Reactive]
     private int _id;
+
+    [Reactive]
+    private int _distributionId;
 
     [Reactive]
     private string _name = string.Empty;
@@ -24,24 +29,19 @@ public sealed partial class ProductionNodeViewModel : ReactiveObject
     [Reactive]
     private string _quantityText = string.Empty;
 
-    [Reactive]
-    private string _priceText = string.Empty;
-
-    [Reactive]
-    private bool _isWeighted;
-
     public ObservableCollection<ProductionNodeViewModel> Children { get; } = [];
 
     public bool IsBatch => Kind == ProductionNodeKind.Batch;
 
     public bool IsItem => Kind == ProductionNodeKind.Item;
 
-    public void SetQuantity(double quantity)
-        => QuantityText = IsWeighted ? $"{quantity:F2} кг" : $"{quantity:F0} шт";
+    public bool IsDistribution => Kind == ProductionNodeKind.Distribution;
 
-    public void SetPrice(int price)
-        => PriceText = IsWeighted ? $"{price:N0} ₽/кг" : $"{price:N0} ₽";
+    public bool IsDistributionClient => Kind == ProductionNodeKind.DistributionClient;
 
-    public void SetTotalCost(int total)
-        => PriceText = $"{total:N0} ₽";
+    public void SetQuantity(int quantity)
+        => QuantityText = $"{quantity} шт";
+
+    public void SetAmount(int amount)
+        => QuantityText = $"{amount:N0} ₽";
 }

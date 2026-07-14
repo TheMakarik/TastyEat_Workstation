@@ -1,7 +1,10 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
+using Material.Icons;
+using Material.Icons.Avalonia;
 using ReactiveUI;
 using TastyEat.Workstation.ViewModels;
 
@@ -93,5 +96,52 @@ public partial class ProductsView : ReactiveUserControl<ProductsViewModel>
 
         await dialog.ShowDialog(owner);
         interaction.SetOutput(result);
+    }
+
+    private void OnActionsButtonClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.Tag is not ProductNodeViewModel node || ViewModel is null)
+            return;
+
+        var flyout = new MenuFlyout();
+
+        if (node.IsProductType)
+        {
+            flyout.Items.Add(new MenuItem
+            {
+                Header = "Изменить тип",
+                Icon = new MaterialIcon { Kind = MaterialIconKind.Pencil },
+                Command = ViewModel.EditNodeCommand,
+                CommandParameter = node
+            });
+
+            flyout.Items.Add(new MenuItem
+            {
+                Header = "Удалить тип",
+                Icon = new MaterialIcon { Kind = MaterialIconKind.Delete },
+                Command = ViewModel.DeleteNodeCommand,
+                CommandParameter = node
+            });
+        }
+        else if (node.IsProduct)
+        {
+            flyout.Items.Add(new MenuItem
+            {
+                Header = "Изменить продукт",
+                Icon = new MaterialIcon { Kind = MaterialIconKind.Pencil },
+                Command = ViewModel.EditNodeCommand,
+                CommandParameter = node
+            });
+
+            flyout.Items.Add(new MenuItem
+            {
+                Header = "Удалить продукт",
+                Icon = new MaterialIcon { Kind = MaterialIconKind.Delete },
+                Command = ViewModel.DeleteNodeCommand,
+                CommandParameter = node
+            });
+        }
+
+        flyout.ShowAt(button);
     }
 }

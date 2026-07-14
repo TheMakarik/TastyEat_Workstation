@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TastyEat.Workstation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cb49ddb5cee08d74312ac566440088b5c05bca44")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b01418c3008629b3283fa4cd2e5178f68ab1e770")]
 [assembly: System.Reflection.AssemblyProductAttribute("TastyEat.Workstation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TastyEat.Workstation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

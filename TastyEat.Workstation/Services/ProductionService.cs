@@ -143,6 +143,42 @@ public sealed class ProductionService : IProductionService
         return batch;
     }
 
+    public async Task<ProductionBatch> UpdateBatchAsync(int id, ProductionEditDto dto, CancellationToken cancellationToken = default)
+    {
+        var batch = await _context.ProductionBatches
+                          .Include(b => b.Items)
+                          .FirstOrDefaultAsync(b => b.Id == id, cancellationToken)
+                      ?? throw new InvalidOperationException($"Production batch with id {id} not found.");
+
+        batch.StartDate = dto.Date.Date;
+
+        _context.ProductionBatchItems.RemoveRange(batch.Items);
+        batch.Items.Clear();
+
+        foreach (var itemDto in dto.Items)
+        {
+            var product = await _context.Products.FindAsync(new object[] { itemDto.ProductId }, cancellationToken)
+                          ?? throw new InvalidOperationException($"Product with id {itemDto.ProductId} not found.");
+
+            batch.Items.Add(new ProductionBatchItem
+            {
+                ProductionBatch = batch,
+                Product = product,
+                Quantity = itemDto.Quantity
+            });
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation(
+            "Production batch #{BatchNumber} updated for {BatchDate} with {ItemCount} items",
+            batch.Number,
+            batch.StartDate.ToString("yyyy-MM-dd"),
+            dto.Items.Count);
+
+        return batch;
+    }
+
     public async Task<ProductionBatchItem> UpdateItemAsync(ProductionItemEditDto dto, CancellationToken cancellationToken = default)
     {
         var item = await _context.ProductionBatchItems

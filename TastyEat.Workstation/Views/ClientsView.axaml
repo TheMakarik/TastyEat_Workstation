@@ -44,9 +44,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid
-        Classes="managementLayout"
-        RowDefinitions="Auto,Auto,*">
+    <Grid Classes="managementLayout" RowDefinitions="Auto,Auto,*">
         <controls:SectionHeader
             Grid.Row="0"
             IconKind="AccountMultiple"
@@ -79,8 +77,11 @@
                         <TextBlock Text="Добавить город" VerticalAlignment="Center" />
                     </StackPanel>
                 </Button>
-                <Rectangle Fill="#E0E0E0" Height="32" Width="1" />
-                <Button Classes="sidebarAction" Command="{Binding ShowClientShareChartCommand}">
+                <Rectangle
+                    Fill="#E0E0E0"
+                    Height="32"
+                    Width="1" />
+                <!--<Button Classes="sidebarAction" Command="{Binding ShowClientShareChartCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <icons:MaterialIcon Kind="ChartPie" />
                         <TextBlock Text="Доля клиентов" VerticalAlignment="Center" />
@@ -91,7 +92,7 @@
                         <icons:MaterialIcon Kind="ChartLine" />
                         <TextBlock Text="Статистика покупателей" VerticalAlignment="Center" />
                     </StackPanel>
-                </Button>
+                </Button>-->
             </StackPanel>
         </Grid>
 

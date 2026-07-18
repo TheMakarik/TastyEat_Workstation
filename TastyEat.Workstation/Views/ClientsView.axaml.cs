@@ -142,6 +142,7 @@ public partial class ClientsView : ReactiveUserControl<ClientsViewModel>
             CommandParameter = row
         });
 
+        /*
         flyout.Items.Add(new MenuItem
         {
             Header = "Открыть статистику клиента",
@@ -165,6 +166,7 @@ public partial class ClientsView : ReactiveUserControl<ClientsViewModel>
             Command = ViewModel.ShowClientPurchaseHistoryChartCommand,
             CommandParameter = row
         });
+        */
 
         flyout.Items.Add(new MenuItem
         {

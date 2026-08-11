@@ -7,6 +7,7 @@ using Material.Icons;
 using Material.Icons.Avalonia;
 using ReactiveUI;
 using TastyEat.Workstation.ViewModels;
+using TastyEat.Workstation.Views.Utils;
 
 namespace TastyEat.Workstation.Views;
 
@@ -27,25 +28,15 @@ public partial class ClientsView : ReactiveUserControl<ClientsViewModel>
         });
     }
 
-    private async Task DoAddClientAsync(IInteractionContext<ClientEditViewModel, ClientEditResult?> interaction)
-    {
-        var window = new ClientEditWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<ClientEditResult?>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoAddClientAsync(IInteractionContext<ClientEditViewModel, ClientEditResult?> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new ClientEditWindow { DataContext = vm });
 
-    private async Task DoEditClientAsync(IInteractionContext<ClientEditViewModel, ClientEditResult?> interaction)
-    {
-        var window = new ClientEditWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<ClientEditResult?>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoEditClientAsync(IInteractionContext<ClientEditViewModel, ClientEditResult?> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new ClientEditWindow { DataContext = vm });
 
     private async Task DoConfirmDeleteAsync(IInteractionContext<ClientRowViewModel, bool> interaction)
     {
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
+        var owner = this.GetOwnerWindow();
         var message = $"Удалить клиента \"{interaction.Input.FullName}\"?";
         var result = await DeleteConfirmationDialog.ShowAsync(owner, message);
         interaction.SetOutput(result);
@@ -57,29 +48,14 @@ public partial class ClientsView : ReactiveUserControl<ClientsViewModel>
         return Task.CompletedTask;
     }
 
-    private async Task DoAddCityAsync(IInteractionContext<CityEditViewModel, bool> interaction)
-    {
-        var window = new CityEditWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<bool>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoAddCityAsync(IInteractionContext<CityEditViewModel, bool> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new CityEditWindow { DataContext = vm });
 
-    private async Task DoShowPieChartAsync(IInteractionContext<PieChartViewModel, Unit> interaction)
-    {
-        var window = new PieChartWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        await window.ShowDialog(owner);
-        interaction.SetOutput(Unit.Default);
-    }
+    private async Task DoShowPieChartAsync(IInteractionContext<PieChartViewModel, Unit> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new PieChartWindow { DataContext = vm });
 
-    private async Task DoShowLineChartAsync(IInteractionContext<LineChartViewModel, Unit> interaction)
-    {
-        var window = new LineChartWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        await window.ShowDialog(owner);
-        interaction.SetOutput(Unit.Default);
-    }
+    private async Task DoShowLineChartAsync(IInteractionContext<LineChartViewModel, Unit> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new LineChartWindow { DataContext = vm });
 
     private void OnActionsButtonClick(object? sender, RoutedEventArgs e)
     {

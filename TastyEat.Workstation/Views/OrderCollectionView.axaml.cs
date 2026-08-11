@@ -8,6 +8,7 @@ using Material.Icons.Avalonia;
 using ReactiveUI;
 using TastyEat.Workstation.Models.Dto;
 using TastyEat.Workstation.ViewModels;
+using TastyEat.Workstation.Views.Utils;
 
 namespace TastyEat.Workstation.Views;
 
@@ -25,18 +26,12 @@ public partial class OrderCollectionView : ReactiveUserControl<OrderCollectionVi
         });
     }
 
-    private async Task DoEditClientOrderAsync(IInteractionContext<OrderCollectionClientEditViewModel, OrderCollectionClientEditDto?> interaction)
-    {
-        var window = new OrderCollectionClientEditWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<OrderCollectionClientEditDto?>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoEditClientOrderAsync(IInteractionContext<OrderCollectionClientEditViewModel, OrderCollectionClientEditDto?> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new OrderCollectionClientEditWindow { DataContext = vm });
 
     private async Task DoConfirmDeleteAsync(IInteractionContext<OrderCollectionNodeViewModel, bool> interaction)
     {
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-
+        var owner = this.GetOwnerWindow();
         var node = interaction.Input;
         var entityName = node.IsCollection
             ? $"сбор \"{node.Name}\""
@@ -48,99 +43,20 @@ public partial class OrderCollectionView : ReactiveUserControl<OrderCollectionVi
 
     private async Task DoStartCollectionChoiceAsync(IInteractionContext<string, bool?> interaction)
     {
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-
-        var closeButton = new Button { Content = "Закрыть и начать новый" };
-        closeButton.Classes.Add("accent");
-        var cancelButton = new Button { Content = "Отмена", IsCancel = true };
-
-        bool? result = null;
-
-        var dialog = new Window
-        {
-            Title = "Незавершённый сбор",
-            Width = 480,
-            Height = 200,
-            CanResize = false,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Content = new StackPanel
-            {
-                Margin = new Avalonia.Thickness(24),
-                Spacing = 24,
-                Children =
-                {
-                    new TextBlock
-                    {
-                        Text = interaction.Input,
-                        TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
-                    },
-                    new StackPanel
-                    {
-                        Orientation = Avalonia.Layout.Orientation.Horizontal,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                        Spacing = 12,
-                        Children = { closeButton, cancelButton }
-                    }
-                }
-            }
-        };
-
-        closeButton.Click += (_, _) =>
-        {
-            result = true;
-            dialog.Close();
-        };
-        cancelButton.Click += (_, _) =>
-        {
-            result = false;
-            dialog.Close();
-        };
-
-        await dialog.ShowDialog(owner);
+        var owner = this.GetOwnerWindow();
+        var result = await MessageDialog.ChoiceAsync(
+            owner,
+            interaction.Input,
+            "Незавершённый сбор",
+            "Закрыть и начать новый",
+            "Отмена");
         interaction.SetOutput(result);
     }
 
     private async Task DoShowInfoAsync(IInteractionContext<string, Unit> interaction)
     {
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-
-        var okButton = new Button { Content = "ОК", IsDefault = true };
-        okButton.Classes.Add("accent");
-
-        var dialog = new Window
-        {
-            Title = "Информация",
-            Width = 420,
-            Height = 180,
-            CanResize = false,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Content = new StackPanel
-            {
-                Margin = new Avalonia.Thickness(24),
-                Spacing = 24,
-                Children =
-                {
-                    new TextBlock
-                    {
-                        Text = interaction.Input,
-                        TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
-                    },
-                    new StackPanel
-                    {
-                        Orientation = Avalonia.Layout.Orientation.Horizontal,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                        Spacing = 12,
-                        Children = { okButton }
-                    }
-                }
-            }
-        };
-
-        okButton.Click += (_, _) => dialog.Close();
-
-        await dialog.ShowDialog(owner);
+        var owner = this.GetOwnerWindow();
+        await MessageDialog.ShowInfoAsync(owner, interaction.Input);
         interaction.SetOutput(Unit.Default);
     }
 

@@ -7,6 +7,7 @@ using Material.Icons;
 using Material.Icons.Avalonia;
 using ReactiveUI;
 using TastyEat.Workstation.ViewModels;
+using TastyEat.Workstation.Views.Utils;
 
 namespace TastyEat.Workstation.Views;
 
@@ -25,26 +26,15 @@ public partial class ProductsView : ReactiveUserControl<ProductsViewModel>
         });
     }
 
-    private async Task DoEditProductTypeAsync(IInteractionContext<ProductTypeEditViewModel, bool> interaction)
-    {
-        var window = new ProductTypeEditWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<bool>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoEditProductTypeAsync(IInteractionContext<ProductTypeEditViewModel, bool> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new ProductTypeEditWindow { DataContext = vm });
 
-    private async Task DoEditProductAsync(IInteractionContext<ProductEditViewModel, ProductEditResult?> interaction)
-    {
-        var window = new ProductEditWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<ProductEditResult?>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoEditProductAsync(IInteractionContext<ProductEditViewModel, ProductEditResult?> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new ProductEditWindow { DataContext = vm });
 
     private async Task DoConfirmDeleteAsync(IInteractionContext<ProductNodeViewModel, bool> interaction)
     {
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-
+        var owner = this.GetOwnerWindow();
         var node = interaction.Input;
         var entityName = node.IsProductType ? $"тип \"{node.Name}\"" : $"продукт \"{node.Name}\"";
         var message = $"Удалить {entityName}?";

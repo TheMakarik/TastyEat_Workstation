@@ -8,6 +8,7 @@ using Material.Icons.Avalonia;
 using ReactiveUI;
 using TastyEat.Workstation.Models.Dto;
 using TastyEat.Workstation.ViewModels;
+using TastyEat.Workstation.Views.Utils;
 
 namespace TastyEat.Workstation.Views;
 
@@ -26,42 +27,21 @@ public partial class ProductionsView : ReactiveUserControl<ProductionsViewModel>
         });
     }
 
-    private async Task DoAddProductionAsync(IInteractionContext<ProductionEditViewModel, bool> interaction)
-    {
-        var window = new ProductionEditWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<bool>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoAddProductionAsync(IInteractionContext<ProductionEditViewModel, bool> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new ProductionEditWindow { DataContext = vm });
 
-    private async Task DoEditItemAsync(IInteractionContext<ProductionItemEditViewModel, ProductionItemEditDto?> interaction)
-    {
-        var window = new ProductionItemEditWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<ProductionItemEditDto?>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoEditItemAsync(IInteractionContext<ProductionItemEditViewModel, ProductionItemEditDto?> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new ProductionItemEditWindow { DataContext = vm });
 
-    private async Task DoAddDistributionAsync(IInteractionContext<DistributionDateViewModel, DateTimeOffset?> interaction)
-    {
-        var window = new DistributionDateWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<DateTimeOffset?>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoAddDistributionAsync(IInteractionContext<DistributionDateViewModel, DateTimeOffset?> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new DistributionDateWindow { DataContext = vm });
 
-    private async Task DoEditDistributionClientAsync(IInteractionContext<DistributionEditViewModel, DistributionClientEditDto?> interaction)
-    {
-        var window = new DistributionEditWindow { DataContext = interaction.Input };
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-        var result = await window.ShowDialog<DistributionClientEditDto?>(owner);
-        interaction.SetOutput(result);
-    }
+    private async Task DoEditDistributionClientAsync(IInteractionContext<DistributionEditViewModel, DistributionClientEditDto?> interaction) =>
+        await interaction.ShowDialogAsync(this, vm => new DistributionEditWindow { DataContext = vm });
 
     private async Task DoConfirmDeleteAsync(IInteractionContext<ProductionNodeViewModel, bool> interaction)
     {
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-
+        var owner = this.GetOwnerWindow();
         var node = interaction.Input;
         var entityName = node.Kind switch
         {

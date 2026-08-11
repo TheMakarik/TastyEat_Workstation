@@ -5,6 +5,7 @@ using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 using TastyEat.Workstation.ViewModels;
+using TastyEat.Workstation.Views.Utils;
 
 namespace TastyEat.Workstation.Views;
 
@@ -72,97 +73,15 @@ public partial class AdministrationView : ReactiveUserControl<AdministrationView
 
     private async Task DoShowInfoAsync(IInteractionContext<string, Unit> interaction)
     {
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-
-        var okButton = new Button { Content = "ОК", IsDefault = true };
-        okButton.Classes.Add("accent");
-
-        var dialog = new Window
-        {
-            Title = "Информация",
-            Width = 460,
-            Height = 200,
-            CanResize = false,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Content = new StackPanel
-            {
-                Margin = new Avalonia.Thickness(24),
-                Spacing = 24,
-                Children =
-                {
-                    new TextBlock
-                    {
-                        Text = interaction.Input,
-                        TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
-                    },
-                    new StackPanel
-                    {
-                        Orientation = Avalonia.Layout.Orientation.Horizontal,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                        Spacing = 12,
-                        Children = { okButton }
-                    }
-                }
-            }
-        };
-
-        okButton.Click += (_, _) => dialog.Close();
-        await dialog.ShowDialog(owner);
+        var owner = this.GetOwnerWindow();
+        await MessageDialog.ShowInfoAsync(owner, interaction.Input);
         interaction.SetOutput(Unit.Default);
     }
 
     private async Task<bool> DoConfirmAsync(IInteractionContext<string, bool> interaction)
     {
-        var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-
-        var result = false;
-        var yesButton = new Button { Content = "Да" };
-        yesButton.Classes.Add("accent");
-        var noButton = new Button { Content = "Нет", IsCancel = true };
-
-        var dialog = new Window
-        {
-            Title = "Подтверждение",
-            Width = 460,
-            Height = 180,
-            CanResize = false,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Content = new StackPanel
-            {
-                Margin = new Avalonia.Thickness(24),
-                Spacing = 24,
-                Children =
-                {
-                    new TextBlock
-                    {
-                        Text = interaction.Input,
-                        TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
-                    },
-                    new StackPanel
-                    {
-                        Orientation = Avalonia.Layout.Orientation.Horizontal,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                        Spacing = 12,
-                        Children = { yesButton, noButton }
-                    }
-                }
-            }
-        };
-
-        yesButton.Click += (_, _) =>
-        {
-            result = true;
-            dialog.Close();
-        };
-        noButton.Click += (_, _) =>
-        {
-            result = false;
-            dialog.Close();
-        };
-
-        await dialog.ShowDialog(owner);
+        var owner = this.GetOwnerWindow();
+        var result = await MessageDialog.ConfirmAsync(owner, interaction.Input);
         return result;
     }
 }

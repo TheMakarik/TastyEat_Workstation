@@ -100,7 +100,7 @@ public sealed partial class ClientEditViewModel : ValidatableViewModelBase
 
                 return Referrers.Any(r => r.FullName == trimmed);
             },
-            "Приглашённый клиент с таким ФИО не существует");
+            "Клиента с таким ФИО не существует");
 
         _canExecute = this.IsValid().ObserveOn(RxApp.MainThreadScheduler);
     }

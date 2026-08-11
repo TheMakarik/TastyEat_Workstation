@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
@@ -15,6 +16,7 @@ public sealed partial class OrderCollectionClientEditViewModel : ValidatableView
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly IObservable<bool> _canExecute;
     private readonly List<OrderCollectionProductGroupViewModel> _allGroups = [];
+    private CompositeDisposable? _rowFilterDisposables;
 
     private const string ShowOnlyProducedProductsKey = "ShowOnlyProducedProducts";
 
@@ -32,6 +34,9 @@ public sealed partial class OrderCollectionClientEditViewModel : ValidatableView
 
     [Reactive]
     private bool _showOnlyProducedProducts;
+
+    [Reactive]
+    private bool _hideZeroQuantityProducts;
 
     [Reactive]
     private string _title = "Добавить клиента в сбор";
@@ -58,6 +63,10 @@ public sealed partial class OrderCollectionClientEditViewModel : ValidatableView
                 ApplyFilter();
                 await SaveSettingAsync();
             });
+
+        this.WhenAnyValue(vm => vm.HideZeroQuantityProducts)
+            .Skip(1)
+            .Subscribe(_ => ApplyFilter());
     }
 
     public ObservableCollection<OrderCollectionProductGroupViewModel> Groups { get; }
@@ -118,6 +127,16 @@ public sealed partial class OrderCollectionClientEditViewModel : ValidatableView
             }
         }
 
+        _rowFilterDisposables?.Dispose();
+        _rowFilterDisposables = new CompositeDisposable();
+
+        foreach (var row in _allGroups.SelectMany(g => g.Rows))
+        {
+            _rowFilterDisposables.Add(
+                row.WhenAnyValue(r => r.OrderedQuantity)
+                    .Subscribe(_ => ApplyFilter()));
+        }
+
         ApplyFilter();
     }
 
@@ -154,7 +173,9 @@ public sealed partial class OrderCollectionClientEditViewModel : ValidatableView
         {
             foreach (var row in group.Rows)
             {
-                row.IsVisible = !ShowOnlyProducedProducts || row.ProducedQuantity > 0;
+                var producedVisible = !ShowOnlyProducedProducts || row.ProducedQuantity > 0;
+                var quantityVisible = !HideZeroQuantityProducts || row.OrderedQuantity > 0;
+                row.IsVisible = producedVisible && quantityVisible;
             }
 
             group.IsVisible = group.Rows.Any(r => r.IsVisible);

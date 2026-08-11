@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WjcGepTOI/8=",
+  "dgSpecHash": "3Zergd029SA=",
   "success": true,
-  "projectFilePath": "/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
+  "projectFilePath": "/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
   "expectedPackageFiles": [
     "/home/themakarik/.nuget/packages/avalonia/12.0.4/avalonia.12.0.4.nupkg.sha512",
     "/home/themakarik/.nuget/packages/avalonia.angle.windows.natives/2.1.27548.20260419/avalonia.angle.windows.natives.2.1.27548.20260419.nupkg.sha512",
@@ -121,16 +121,13 @@
   ],
   "logs": [
     {
-      "code": "NU1903",
+      "code": "NU1900",
       "level": "Warning",
-      "message": "Package 'SQLitePCLRaw.lib.e_sqlite3' 2.1.11 has a known high severity vulnerability, https://github.com/advisories/GHSA-2m69-gcr7-jv3q",
-      "projectPath": "/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json.",
+      "projectPath": "/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
       "warningLevel": 1,
-      "filePath": "/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
-      "libraryId": "SQLitePCLRaw.lib.e_sqlite3",
-      "targetGraphs": [
-        "net10.0"
-      ]
+      "filePath": "/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
+      "targetGraphs": []
     }
   ]
 }

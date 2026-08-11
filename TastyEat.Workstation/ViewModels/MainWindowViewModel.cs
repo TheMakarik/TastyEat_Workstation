@@ -5,29 +5,25 @@ using ReactiveUI.SourceGenerators;
 
 namespace TastyEat.Workstation.ViewModels;
 
-public sealed partial class MainWindowViewModel : ViewModelBase
+public sealed partial class MainWindowViewModel(
+    ClientsViewModel clients,
+    ProductsViewModel products,
+    ProductionsViewModel productions,
+    OrderCollectionViewModel orderCollection,
+    AdministrationViewModel administration)
+    : ViewModelBase
 {
-    public MainWindowViewModel(
-        ClientsViewModel clients,
-        ProductsViewModel products,
-        ProductionsViewModel productions,
-        OrderCollectionViewModel orderCollection,
-        AdministrationViewModel administration)
-    {
-        TabItems =
-        [
-            clients,
-            products,
-            productions,
-            orderCollection,
-            administration
-        ];
-    }
-
     [Reactive]
     private int _selectedTabIndex;
 
-    public ObservableCollection<ViewModelBase> TabItems { get; }
+    public ObservableCollection<ViewModelBase> TabItems { get; } =
+    [
+        clients,
+        products,
+        productions,
+        orderCollection,
+        administration
+    ];
 
     public Interaction<string, Unit> ShowError { get; } = new();
 

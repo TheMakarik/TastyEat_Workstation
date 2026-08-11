@@ -47,54 +47,8 @@ public partial class ProductsView : ReactiveUserControl<ProductsViewModel>
 
         var node = interaction.Input;
         var entityName = node.IsProductType ? $"тип \"{node.Name}\"" : $"продукт \"{node.Name}\"";
-        var result = false;
-
-        var deleteButton = new Button { Content = "Удалить" };
-        deleteButton.Classes.Add("accent");
-        var cancelButton = new Button { Content = "Отмена", IsCancel = true };
-
-        var dialog = new Window
-        {
-            Title = "Подтверждение удаления",
-            Width = 420,
-            Height = 180,
-            CanResize = false,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Content = new StackPanel
-            {
-                Margin = new Avalonia.Thickness(24),
-                Spacing = 24,
-                Children =
-                {
-                    new TextBlock
-                    {
-                        Text = $"Удалить {entityName}?",
-                        TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
-                    },
-                    new StackPanel
-                    {
-                        Orientation = Avalonia.Layout.Orientation.Horizontal,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                        Spacing = 12,
-                        Children = { deleteButton, cancelButton }
-                    }
-                }
-            }
-        };
-
-        deleteButton.Click += (_, _) =>
-        {
-            result = true;
-            dialog.Close();
-        };
-        cancelButton.Click += (_, _) =>
-        {
-            result = false;
-            dialog.Close();
-        };
-
-        await dialog.ShowDialog(owner);
+        var message = $"Удалить {entityName}?";
+        var result = await DeleteConfirmationDialog.ShowAsync(owner, message);
         interaction.SetOutput(result);
     }
 

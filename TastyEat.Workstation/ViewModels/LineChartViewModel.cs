@@ -7,14 +7,9 @@ using TastyEat.Workstation.Views;
 
 namespace TastyEat.Workstation.ViewModels;
 
-public sealed partial class LineChartViewModel : ViewModelBase
+public sealed partial class LineChartViewModel(LoadingControlViewModel loading) : ViewModelBase
 {
     private static readonly SKColor[] Colors = ChartColorProvider.GetColors();
-
-    public LineChartViewModel(LoadingControlViewModel loading)
-    {
-        Loading = loading;
-    }
 
     [Reactive]
     private string _chartTitle = string.Empty;
@@ -28,7 +23,7 @@ public sealed partial class LineChartViewModel : ViewModelBase
     [Reactive]
     private Axis[] _yAxes = [];
 
-    public LoadingControlViewModel Loading { get; }
+    public LoadingControlViewModel Loading { get; } = loading;
 
     public override string Title => "График";
     public override string IconName => "ChartLine";

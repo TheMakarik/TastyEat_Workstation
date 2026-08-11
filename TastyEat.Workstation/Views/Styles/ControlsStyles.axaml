@@ -123,4 +123,39 @@
         <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
     </Style>
 
+    <!-- DatePicker -->
+    <Style Selector="DatePicker">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="DatePicker:focus /template/ TextBox#PART_TextBox">
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentLightBrush}" />
+    </Style>
+
+    <!-- Calendar popup -->
+    <Style Selector="Calendar">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
+    </Style>
+
+    <Style Selector="CalendarDayButton:selected">
+        <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="CalendarDayButton:pointerover">
+        <Setter Property="Background" Value="{DynamicResource AccentLightBrush}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="CalendarButton:selected">
+        <Setter Property="Background" Value="{DynamicResource AccentColor}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="CalendarButton:pointerover">
+        <Setter Property="Background" Value="{DynamicResource AccentLightBrush}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
 </Styles>

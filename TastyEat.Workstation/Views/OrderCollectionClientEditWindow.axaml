@@ -23,7 +23,10 @@
             FontWeight="Bold"
             Text="{Binding Title}" />
 
-        <StackPanel Grid.Row="1" Margin="0,20,0,0" Spacing="12">
+        <StackPanel
+            Grid.Row="1"
+            Margin="0,20,0,0"
+            Spacing="12">
             <StackPanel Spacing="4">
                 <TextBlock Text="Клиент" />
                 <AutoCompleteBox
@@ -35,9 +38,7 @@
                     ValueMemberBinding="{Binding FullName}" />
             </StackPanel>
 
-            <CheckBox
-                Content="Показывать только произведённую продукцию"
-                IsChecked="{Binding ShowOnlyProducedProducts}" />
+            <CheckBox Content="Показывать только произведённую продукцию" IsChecked="{Binding ShowOnlyProducedProducts}" />
         </StackPanel>
 
         <ScrollViewer Grid.Row="2" Margin="0,20,0,0">
@@ -63,7 +64,7 @@
                                             ColumnDefinitions="*,Auto,Auto,Auto"
                                             IsVisible="{Binding IsVisible}"
                                             Margin="24,4,24,4"
-                                            VerticalAlignment="Center">
+                                            VerticalAlignment="Top">
                                             <TextBlock
                                                 Grid.Column="0"
                                                 Text="{Binding Product.Name}"

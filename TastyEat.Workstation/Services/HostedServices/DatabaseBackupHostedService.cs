@@ -7,22 +7,12 @@ using TastyEat.Workstation.Services.Interfaces;
 
 namespace TastyEat.Workstation.Services.HostedServices;
 
-public sealed class DatabaseBackupHostedService : BackgroundService
+public sealed class DatabaseBackupHostedService(
+    IApplicationDataService applicationDataService,
+    IOptions<AdministrationOptions> options,
+    ILogger<DatabaseBackupHostedService> logger)
+    : BackgroundService
 {
-    private readonly IApplicationDataService _applicationDataService;
-    private readonly IOptions<AdministrationOptions> _options;
-    private readonly ILogger<DatabaseBackupHostedService> _logger;
-
-    public DatabaseBackupHostedService(
-        IApplicationDataService applicationDataService,
-        IOptions<AdministrationOptions> options,
-        ILogger<DatabaseBackupHostedService> logger)
-    {
-        _applicationDataService = applicationDataService;
-        _options = options;
-        _logger = logger;
-    }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
@@ -34,7 +24,7 @@ public sealed class DatabaseBackupHostedService : BackgroundService
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to start database backup");
+                logger.LogError(ex, "Failed to start database backup");
             }
 
             await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
@@ -43,11 +33,11 @@ public sealed class DatabaseBackupHostedService : BackgroundService
 
     private bool ShouldCreateBackup()
     {
-        var interval = _options.Value.DatabaseBackupIntervalDays;
+        var interval = options.Value.DatabaseBackupIntervalDays;
         if (interval <= 0)
             return false;
 
-        var backups = Directory.GetFiles(_applicationDataService.BackupsDirectory, "tastyeat_*.db")
+        var backups = Directory.GetFiles(applicationDataService.BackupsDirectory, "tastyeat_*.db")
             .Select(f => new FileInfo(f))
             .Where(f => f.Exists)
             .OrderByDescending(f => f.LastWriteTime)
@@ -61,18 +51,18 @@ public sealed class DatabaseBackupHostedService : BackgroundService
 
     private void RunDetachedBackup()
     {
-        Directory.CreateDirectory(_applicationDataService.BackupsDirectory);
-        Directory.CreateDirectory(_applicationDataService.ScriptsDirectory);
+        Directory.CreateDirectory(applicationDataService.BackupsDirectory);
+        Directory.CreateDirectory(applicationDataService.ScriptsDirectory);
 
         var fileName = $"tastyeat_{DateTime.Now:yyyyMMdd_HHmmss}.db";
-        var targetPath = Path.Join(_applicationDataService.BackupsDirectory, fileName);
+        var targetPath = Path.Join(applicationDataService.BackupsDirectory, fileName);
 
         if (OperatingSystem.IsWindows())
         {
-            var scriptPath = Path.Join(_applicationDataService.ScriptsDirectory, "backup.bat");
+            var scriptPath = Path.Join(applicationDataService.ScriptsDirectory, "backup.bat");
             File.WriteAllText(scriptPath,
                 $"@echo off{Environment.NewLine}" +
-                $"copy /Y \"{_applicationDataService.DatabasePath}\" \"{targetPath}\"{Environment.NewLine}");
+                $"copy /Y \"{applicationDataService.DatabasePath}\" \"{targetPath}\"{Environment.NewLine}");
 
             Process.Start(new ProcessStartInfo
             {
@@ -84,10 +74,10 @@ public sealed class DatabaseBackupHostedService : BackgroundService
         }
         else
         {
-            var scriptPath = Path.Join(_applicationDataService.ScriptsDirectory, "backup.sh");
+            var scriptPath = Path.Join(applicationDataService.ScriptsDirectory, "backup.sh");
             File.WriteAllText(scriptPath,
                 $"#!/bin/bash{Environment.NewLine}" +
-                $"cp \"{_applicationDataService.DatabasePath}\" \"{targetPath}\"{Environment.NewLine}");
+                $"cp \"{applicationDataService.DatabasePath}\" \"{targetPath}\"{Environment.NewLine}");
 
             Process.Start(new ProcessStartInfo
             {
@@ -98,6 +88,6 @@ public sealed class DatabaseBackupHostedService : BackgroundService
             });
         }
 
-        _logger.LogInformation("Started detached database backup to {TargetPath}", targetPath);
+        logger.LogInformation("Started detached database backup to {TargetPath}", targetPath);
     }
 }

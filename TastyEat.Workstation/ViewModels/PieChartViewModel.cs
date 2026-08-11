@@ -7,14 +7,9 @@ using TastyEat.Workstation.Views;
 
 namespace TastyEat.Workstation.ViewModels;
 
-public sealed partial class PieChartViewModel : ViewModelBase
+public sealed partial class PieChartViewModel(LoadingControlViewModel loading) : ViewModelBase
 {
     private static readonly SKColor[] Colors = ChartColorProvider.GetColors();
-
-    public PieChartViewModel(LoadingControlViewModel loading)
-    {
-        Loading = loading;
-    }
 
     [Reactive]
     private string _chartTitle = string.Empty;
@@ -22,7 +17,7 @@ public sealed partial class PieChartViewModel : ViewModelBase
     [Reactive]
     private ISeries[] _series = [];
 
-    public LoadingControlViewModel Loading { get; }
+    public LoadingControlViewModel Loading { get; } = loading;
 
     public override string Title => "Диаграмма";
     public override string IconName => "ChartPie";

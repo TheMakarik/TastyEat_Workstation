@@ -7,20 +7,12 @@ using TastyEat.Workstation.Services.Interfaces;
 
 namespace TastyEat.Workstation.Services;
 
-public sealed class OrderCollectionService : IOrderCollectionService
+public sealed class OrderCollectionService(DataContext context, ILogger<OrderCollectionService> logger)
+    : IOrderCollectionService
 {
-    private readonly DataContext _context;
-    private readonly ILogger<OrderCollectionService> _logger;
-
-    public OrderCollectionService(DataContext context, ILogger<OrderCollectionService> logger)
-    {
-        _context = context;
-        _logger = logger;
-    }
-
     public async Task<IReadOnlyList<OrderCollection>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.OrderCollections
+        return await context.OrderCollections
             .AsNoTracking()
             .Include(c => c.Clients)
             .ThenInclude(cc => cc.Client)
@@ -33,7 +25,7 @@ public sealed class OrderCollectionService : IOrderCollectionService
 
     public async Task<OrderCollection?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _context.OrderCollections
+        return await context.OrderCollections
             .AsNoTracking()
             .Include(c => c.Clients)
             .ThenInclude(cc => cc.Client)
@@ -45,7 +37,7 @@ public sealed class OrderCollectionService : IOrderCollectionService
 
     public async Task<OrderCollection?> GetActiveAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.OrderCollections
+        return await context.OrderCollections
             .AsNoTracking()
             .Include(c => c.Clients)
             .ThenInclude(cc => cc.Client)
@@ -62,34 +54,34 @@ public sealed class OrderCollectionService : IOrderCollectionService
             StartDate = DateTime.Now
         };
 
-        _context.OrderCollections.Add(collection);
-        await _context.SaveChangesAsync(cancellationToken);
+        context.OrderCollections.Add(collection);
+        await context.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Order collection started (Id: {CollectionId})", collection.Id);
+        logger.LogInformation("Order collection started (Id: {CollectionId})", collection.Id);
         return collection;
     }
 
     public async Task<OrderCollection> CloseAsync(int id, CancellationToken cancellationToken = default)
     {
-        var collection = await _context.OrderCollections.FindAsync(new object[] { id }, cancellationToken)
+        var collection = await context.OrderCollections.FindAsync(new object[] { id }, cancellationToken)
                          ?? throw new InvalidOperationException($"Order collection with id {id} not found.");
 
         collection.EndDate = DateTime.Now;
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Order collection closed (Id: {CollectionId})", collection.Id);
+        logger.LogInformation("Order collection closed (Id: {CollectionId})", collection.Id);
         return collection;
     }
 
     public async Task<OrderCollectionClient> UpsertClientAsync(int collectionId, OrderCollectionClientEditDto dto, CancellationToken cancellationToken = default)
     {
-        var collection = await _context.OrderCollections
+        var collection = await context.OrderCollections
                               .Include(c => c.Clients)
                               .ThenInclude(cc => cc.Items)
                               .FirstOrDefaultAsync(c => c.Id == collectionId, cancellationToken)
                           ?? throw new InvalidOperationException($"Order collection with id {collectionId} not found.");
 
-        var client = await _context.Clients.FindAsync(new object[] { dto.ClientId }, cancellationToken)
+        var client = await context.Clients.FindAsync(new object[] { dto.ClientId }, cancellationToken)
                      ?? throw new InvalidOperationException($"Client with id {dto.ClientId} not found.");
 
         OrderCollectionClient clientEntry;
@@ -100,7 +92,7 @@ public sealed class OrderCollectionService : IOrderCollectionService
                 OrderCollection = collection,
                 Client = client
             };
-            _context.OrderCollectionClients.Add(clientEntry);
+            context.OrderCollectionClients.Add(clientEntry);
         }
         else
         {
@@ -108,13 +100,13 @@ public sealed class OrderCollectionService : IOrderCollectionService
                           ?? throw new InvalidOperationException($"Order collection client with id {dto.Id} not found.");
 
             clientEntry.Client = client;
-            _context.OrderCollectionItems.RemoveRange(clientEntry.Items);
+            context.OrderCollectionItems.RemoveRange(clientEntry.Items);
             clientEntry.Items.Clear();
         }
 
         foreach (var itemDto in dto.Items.Where(i => i.Quantity > 0))
         {
-            var product = await _context.Products.FindAsync(new object[] { itemDto.ProductId }, cancellationToken)
+            var product = await context.Products.FindAsync(new object[] { itemDto.ProductId }, cancellationToken)
                           ?? throw new InvalidOperationException($"Product with id {itemDto.ProductId} not found.");
 
             clientEntry.Items.Add(new OrderCollectionItem
@@ -125,9 +117,9 @@ public sealed class OrderCollectionService : IOrderCollectionService
             });
         }
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation(
+        logger.LogInformation(
             "Order collection client saved (CollectionId: {CollectionId}, ClientId: {ClientId})",
             collectionId,
             client.Id);
@@ -136,54 +128,54 @@ public sealed class OrderCollectionService : IOrderCollectionService
 
     public async Task DeleteCollectionAsync(int id, CancellationToken cancellationToken = default)
     {
-        var collection = await _context.OrderCollections
+        var collection = await context.OrderCollections
                               .Include(c => c.Clients)
                               .ThenInclude(cc => cc.Items)
                               .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
         if (collection is null)
         {
-            _logger.LogWarning("Attempted to delete non-existing order collection with id {CollectionId}", id);
+            logger.LogWarning("Attempted to delete non-existing order collection with id {CollectionId}", id);
             return;
         }
 
-        _context.OrderCollections.Remove(collection);
-        await _context.SaveChangesAsync(cancellationToken);
+        context.OrderCollections.Remove(collection);
+        await context.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Order collection deleted (Id: {CollectionId})", id);
+        logger.LogInformation("Order collection deleted (Id: {CollectionId})", id);
     }
 
     public async Task DeleteClientAsync(int id, CancellationToken cancellationToken = default)
     {
-        var clientEntry = await _context.OrderCollectionClients
+        var clientEntry = await context.OrderCollectionClients
                                 .Include(cc => cc.Items)
                                 .FirstOrDefaultAsync(cc => cc.Id == id, cancellationToken);
 
         if (clientEntry is null)
         {
-            _logger.LogWarning("Attempted to delete non-existing order collection client with id {ClientEntryId}", id);
+            logger.LogWarning("Attempted to delete non-existing order collection client with id {ClientEntryId}", id);
             return;
         }
 
-        _context.OrderCollectionClients.Remove(clientEntry);
-        await _context.SaveChangesAsync(cancellationToken);
+        context.OrderCollectionClients.Remove(clientEntry);
+        await context.SaveChangesAsync(cancellationToken);
 
-        _logger.LogInformation("Order collection client deleted (Id: {ClientEntryId})", id);
+        logger.LogInformation("Order collection client deleted (Id: {ClientEntryId})", id);
     }
 
     public async Task<int> GetAvailableStockAsync(int productId, int? excludingClientId = null, CancellationToken cancellationToken = default)
     {
-        var produced = await _context.ProductionBatchItems
+        var produced = await context.ProductionBatchItems
             .AsNoTracking()
             .Where(i => i.Product.Id == productId)
             .SumAsync(i => (int?)i.Quantity, cancellationToken) ?? 0;
 
-        var distributed = await _context.DistributionItems
+        var distributed = await context.DistributionItems
             .AsNoTracking()
             .Where(i => i.Product.Id == productId)
             .SumAsync(i => (int?)i.Quantity, cancellationToken) ?? 0;
 
-        var reservedQuery = _context.OrderCollectionItems
+        var reservedQuery = context.OrderCollectionItems
             .AsNoTracking()
             .Where(i => i.Product.Id == productId);
 
@@ -199,7 +191,7 @@ public sealed class OrderCollectionService : IOrderCollectionService
 
     public async Task<int> GetProducedQuantityAsync(int productId, CancellationToken cancellationToken = default)
     {
-        return await _context.ProductionBatchItems
+        return await context.ProductionBatchItems
             .AsNoTracking()
             .Where(i => i.Product.Id == productId)
             .SumAsync(i => (int?)i.Quantity, cancellationToken) ?? 0;
@@ -207,7 +199,7 @@ public sealed class OrderCollectionService : IOrderCollectionService
 
     public async Task<IReadOnlyList<OrderCollectionStatisticDto>> GetCollectionStatisticsAsync(CancellationToken cancellationToken = default)
     {
-        return await _context.OrderCollections
+        return await context.OrderCollections
             .AsNoTracking()
             .Include(c => c.Clients)
             .Select(c => new OrderCollectionStatisticDto(c.StartDate, c.Clients.Count))

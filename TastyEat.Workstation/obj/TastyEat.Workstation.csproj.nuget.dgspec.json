@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj": {}
+    "/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj": {}
   },
   "projects": {
-    "/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj": {
+    "/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
+        "projectUniqueName": "/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
         "projectName": "TastyEat.Workstation",
-        "projectPath": "/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
+        "projectPath": "/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/TastyEat.Workstation.csproj",
         "packagesPath": "/home/themakarik/.nuget/packages/",
-        "outputPath": "/home/themakarik/Проекты(Программирование)/TastyEat.Workstation/TastyEat.Workstation/obj/",
+        "outputPath": "/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/themakarik/.nuget/NuGet/NuGet.Config"
@@ -162,7 +162,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/10.0.109/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/10.0.110/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

@@ -46,54 +46,8 @@ public partial class ClientsView : ReactiveUserControl<ClientsViewModel>
     private async Task DoConfirmDeleteAsync(IInteractionContext<ClientRowViewModel, bool> interaction)
     {
         var owner = TopLevel.GetTopLevel(this) as Window ?? throw new InvalidOperationException("No top-level window found");
-
-        var result = false;
-        var deleteButton = new Button { Content = "Удалить" };
-        deleteButton.Classes.Add("Danger");
-        var cancelButton = new Button { Content = "Отмена", IsCancel = true };
-
-        var dialog = new Window
-        {
-            Title = "Подтверждение удаления",
-            Width = 420,
-            Height = 180,
-            CanResize = false,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Content = new StackPanel
-            {
-                Margin = new Avalonia.Thickness(24),
-                Spacing = 24,
-                Children =
-                {
-                    new TextBlock
-                    {
-                        Text = $"Удалить клиента \"{interaction.Input.FullName}\"?",
-                        TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
-                    },
-                    new StackPanel
-                    {
-                        Orientation = Avalonia.Layout.Orientation.Horizontal,
-                        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                        Spacing = 12,
-                        Children = { deleteButton, cancelButton }
-                    }
-                }
-            }
-        };
-
-        deleteButton.Click += (_, _) =>
-        {
-            result = true;
-            dialog.Close();
-        };
-        cancelButton.Click += (_, _) =>
-        {
-            result = false;
-            dialog.Close();
-        };
-
-        await dialog.ShowDialog(owner);
+        var message = $"Удалить клиента \"{interaction.Input.FullName}\"?";
+        var result = await DeleteConfirmationDialog.ShowAsync(owner, message);
         interaction.SetOutput(result);
     }
 

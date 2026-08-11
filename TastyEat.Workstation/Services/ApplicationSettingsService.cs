@@ -4,18 +4,11 @@ using TastyEat.Workstation.Services.Interfaces;
 
 namespace TastyEat.Workstation.Services;
 
-public sealed class ApplicationSettingsService : IApplicationSettingsService
+public sealed class ApplicationSettingsService(DataContext context) : IApplicationSettingsService
 {
-    private readonly DataContext _context;
-
-    public ApplicationSettingsService(DataContext context)
-    {
-        _context = context;
-    }
-
     public async Task<bool> GetBoolAsync(string key, bool defaultValue = false, CancellationToken cancellationToken = default)
     {
-        var setting = await _context.ApplicationSettings
+        var setting = await context.ApplicationSettings
             .AsNoTracking()
             .FirstOrDefaultAsync(s => s.Key == key, cancellationToken);
 
@@ -27,19 +20,19 @@ public sealed class ApplicationSettingsService : IApplicationSettingsService
 
     public async Task SetBoolAsync(string key, bool value, CancellationToken cancellationToken = default)
     {
-        var setting = await _context.ApplicationSettings
+        var setting = await context.ApplicationSettings
             .FirstOrDefaultAsync(s => s.Key == key, cancellationToken);
 
         if (setting is null)
         {
             setting = new Models.Tables.ApplicationSetting { Key = key, Value = value.ToString() };
-            _context.ApplicationSettings.Add(setting);
+            context.ApplicationSettings.Add(setting);
         }
         else
         {
             setting.Value = value.ToString();
         }
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

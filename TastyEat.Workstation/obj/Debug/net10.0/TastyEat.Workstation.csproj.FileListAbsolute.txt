@@ -530,15 +530,12 @@
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.FreeDesktop.AtSpi.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.HarfBuzz.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.Native.dll
-/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.ReactiveUI.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.Remote.Protocol.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.Skia.dll
-/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.Themes.Fluent.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.Win32.Automation.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.Win32.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.X11.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/AvaloniaUI.DiagnosticsSupport.Avalonia.dll
-/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/DynamicData.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/HarfBuzzSharp.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Humanizer.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Irihi.Avalonia.Shared.dll
@@ -595,8 +592,6 @@
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Microsoft.VisualStudio.SolutionPersistence.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Mono.TextTemplating.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Newtonsoft.Json.dll
-/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/ReactiveUI.dll
-/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/ReactiveUI.Validation.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Scrutor.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Semi.Avalonia.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Serilog.dll
@@ -607,7 +602,6 @@
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/SharpCompress.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/SkiaSharp.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/SkiaSharp.HarfBuzz.dll
-/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Splat.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/SQLitePCLRaw.batteries_v2.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/SQLitePCLRaw.core.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/SQLitePCLRaw.provider.e_sqlite3.dll
@@ -618,7 +612,6 @@
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/System.Composition.Runtime.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/System.Composition.TypedParts.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/System.Diagnostics.EventLog.dll
-/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/System.Reactive.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Tmds.DBus.Protocol.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.Controls.TreeDataGrid.dll
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/cs/Microsoft.CodeAnalysis.resources.dll
@@ -767,3 +760,5 @@
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/obj/Debug/net10.0/TastyEat.Workstation.pdb
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/obj/Debug/net10.0/TastyEat.Workstation.genruntimeconfig.cache
 /home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/obj/Debug/net10.0/ref/TastyEat.Workstation.dll
+/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/Avalonia.Markup.Declarative.dll
+/home/themakarik/Проекты(Программирование)/TastyEat_Workstation/TastyEat.Workstation/bin/Debug/net10.0/CommunityToolkit.Mvvm.dll

@@ -22,6 +22,8 @@ dotnet run --project TastyEat.Workstation
 
 ## Диагностика по симптомам
 
+- **Ошибки CS1955 «невызываемый член ... не может использоваться как метод» на `.Text(...)`, `.ItemsSource(...)`** — не загрузился source-generator Avalonia.Markup.Declarative: он требует Roslyn ≥ 5.3, а SDK 10.0.110 поставляет 5.0. Проверь наличие `Microsoft.Net.Compilers.Toolset` 5.6.0 в csproj (обязателен). Также смотри предупреждение CS9057 в выводе сборки.
+- **UI — только C# (Avalonia.Markup.Declarative), axaml-файлов нет.** Компоненты: `Components/*Screen.cs`, диалоги: `Components/Dialogs/*Dialog.cs`; паттерн — в AGENTS.md.
 - **Приложение не открывается после LoadingWindow** — смотри консоль и последний `log-*.txt`: конфиг берётся из каталога приложения (`AppContext.BaseDirectory`), поэтому правки `appsettings.json` в репозитории требуют пересборки (`CopyToOutputDirectory`); миграции падают при несовместимой схеме SQLite.
 - **`SQLite Error 5: database is locked`** — в `DataContext` уже стоит `PRAGMA busy_timeout = 5000`; проверь, что не держишь базу открытым внешним инструментом (DB Browser и т.п.).
 - **Пустое окно/вкладка без данных** — проверь сервис и данные в тестовой базе; VM экранов грузятся конструктором, ошибки глотаются `catch (Exception)` с записью в лог — ищи `Failed to load ...` в логах.

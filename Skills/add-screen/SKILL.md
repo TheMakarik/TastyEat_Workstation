@@ -1,126 +1,80 @@
 ---
 name: add-screen
-description: Добавить новый экран-вкладку в TastyEat.Workstation (Avalonia, ReactiveUI) — ViewModel с Title/IconName, UserControl-вью с TreeDataGrid, регистрация вкладки в MainWindowViewModel и DataTemplate в MainWindow. Используй, когда пользователь просит добавить экран, вкладку, страницу, раздел интерфейса, новое представление данных.
+description: Добавить новый экран-вкладку в TastyEat.Workstation на Avalonia.Markup.Declarative (C# UI без axaml) — компонент ScreenComponent со вложенным State на CommunityToolkit.Mvvm, таблица TreeDataGrid, регистрация вкладки в MainWindow, DI-скан Scrutor. Используй при просьбах добавить экран, вкладку, страницу, раздел интерфейса.
 ---
 
-# Добавление экрана-вкладки
+# Добавление экрана-вкладки (AMD, без axaml)
 
-Каждый экран — вкладка `TabControl` в `MainWindow`. Цепочка: ViewModel → View → регистрация в `MainWindowViewModel` → `DataTemplate` в `MainWindow.axaml`.
+Весь UI — чистый C#. Образцы: `Components/ClientsScreen.cs` (плоская таблица), `Components/ProductsScreen.cs` (дерево), `Components/AdministrationScreen.cs` (без таблицы).
 
-## 1. ViewModel — `ViewModels/<Name>ViewModel.cs`
-
-`sealed partial class`, наследник `ViewModelBase` (даёт требования `Title` и `IconName` — имя вкладки и имя иконки из перечисления `MaterialIconKind`, строкой). Свойства — `[Reactive]` на приватальных полях, команды — `[RelayCommand]`:
+## 1. Компонент — `Components/<Name>Screen.cs`
 
 ```csharp
-using System.Collections.ObjectModel;
-using Avalonia.Controls.Models.TreeDataGrid;
-using DynamicData;
-using ReactiveUI;
-using ReactiveUI.SourceGenerators;
-using TastyEat.Workstation.Models.Dto;
-using TastyEat.Workstation.Services.Interfaces;
-using TastyEat.Workstation.ViewModels;
+using Avalonia.Controls; // и др. по необходимости
+using Avalonia.Markup.Declarative;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Material.Icons;
+using TastyEat.Workstation.Ui;
 
-namespace TastyEat.Workstation.ViewModels;
+namespace TastyEat.Workstation.Components;
 
-public sealed partial class WarehousesViewModel(IWarehouseService warehouseService, ILogger<WarehousesViewModel> logger) : ViewModelBase
+public sealed partial class WarehousesScreen(
+    IServiceScopeFactory scopeFactory,
+    ILogger<WarehousesScreen> logger) : ScreenComponent<WarehousesScreen.State>(new State())
 {
-    public override string Title => "Склады";
-    public override string IconName => "Warehouse";
-
-    [Reactive]
-    private string _searchText = string.Empty;
-
-    [Reactive]
-    private bool _isLoading = true;
-
-    public FlatTreeDataGridSource<WarehouseRowViewModel> WarehousesSource { get; } = new([])
+    public sealed partial class State : ObservableObject
     {
-        Columns =
-        {
-            new TextColumn<WarehouseRowViewModel, string>("Название", x => x.Name, new GridLength(2, GridUnitType.Star)),
-        }
-    };
+        [ObservableProperty]
+        public partial string SearchText { get; set; } = string.Empty;
+
+        [ObservableProperty]
+        public partial bool IsLoading { get; set; } = true;
+    }
+
+    public override string Title => "Склады";
+    public override MaterialIconKind Icon => MaterialIconKind.Warehouse;
+
+    protected override object Build(State state) => /* каркас ниже */;
 }
 ```
 
-Конвенции:
-- иконка — точное имя значения `MaterialIconKind` (проверь по `Material.Icons`); вкладка превращает строку в Kind через `MakripExtensions.ToIconKindConverter`;
-- async-команды: `[RelayCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]`, у них внутри `try/catch (OperationCanceledException) {} / catch (Exception ex) { лог } / finally { IsLoading = false }`;
-- отмена повторных загрузок — `CancellationTokenSource` + `Interlocked.Exchange` (образец `ClientsViewModel.RefreshLoadCts`);
-- троттлинг поиска: `WhenAnyValue(vm => vm.SearchText).Throttle(TimeSpan.FromMilliseconds(400)).DistinctUntilChanged().Select(_ => Unit.Default).InvokeCommand(SearchCommand)`;
-- VM регистрируется Scrutor автоматически (суффикс `ViewModel`, transient) — вручную не регистрируй.
+Обязательно: `sealed partial` (генератору AMD нужен partial); состояние читай через `ScreenState` (не `State` — это вложенный тип). Команды — `[RelayCommand]` на приватных методах (в т.ч. с параметром-строкой: `EditNodeCommand`/`CommandParameter`).
 
-## 2. View — `Views/<Name>View.axaml` + `.axaml.cs`
-
-`UserControl` с `x:DataType` (compiled bindings включены глобально) и code-behind `ReactiveUserControl<XxxViewModel>`. Единый каркас экрана (скопируй из `ProductsView.axaml`):
-
-```xml
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:TastyEat.Workstation.ViewModels"
-             xmlns:controls="clr-namespace:TastyEat.Workstation.Views.Controls"
-             x:Class="TastyEat.Workstation.Views.WarehousesView"
-             x:DataType="vm:WarehousesViewModel">
-  <Grid Classes="managementLayout" RowDefinitions="Auto,Auto,*">
-    <controls:SectionHeader Grid.Row="0" IconKind="Warehouse" Title="Склады" Subtitle="Управление складами" />
-    <StackPanel Grid.Row="1" Classes="topbar" Orientation="Horizontal">
-      <controls:SearchTextBox Width="300" Text="{Binding SearchText}" />
-    </StackPanel>
-    <Border Grid.Row="2" Classes="dataGridHost">
-      <TreeDataGrid Source="{Binding WarehousesSource}" />
-    </Border>
-  </Grid>
-</UserControl>
-```
+## 2. Каркас (единый для экранов-таблиц)
 
 ```csharp
-using Avalonia.Controls;
-using ReactiveUI;
-using TastyEat.Workstation.ViewModels;
-
-namespace TastyEat.Workstation.Views;
-
-public partial class WarehousesView : ReactiveUserControl<WarehousesViewModel>
+protected override object Build(State state)
 {
-    public WarehousesView() { }
+    _source ??= BuildSource();  // Flat/HierarchicalTreeDataGridSource — лениво, НЕ в инициализаторе поля
+    ...
+    return new Grid().Rows("Auto, Auto, *").Classes("managementLayout")
+        .Children(
+            UiFactory.Header(Icon, Title, "подзаголовок"),
+            new Grid().Cols("*, Auto").Classes("topbar").Grid_Row(1)
+                .Children(
+                    new SearchTextBox { Width = 320 }.Text(state, x => x.SearchText, Avalonia.Data.BindingMode.TwoWay),
+                    new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12 }
+                        .Children(UiFactory.ActionButton(MaterialIconKind.Plus, "Добавить", () => _ = AddAsync()))
+                        .Grid_Column(1)),
+            new Border().Classes("dataGridHost").Grid_Row(2)
+                .Child(new TreeDataGrid { Source = _source }),
+            UiFactory.LoadingOverlay(state, x => x.IsLoading).Grid_RowSpan(3));
 }
 ```
 
-Стилизация — только готовыми классами из `Views/Styles/` (`managementLayout`, `topbar`, `dataGridHost`, `Button.accent`, `Button.sidebarAction`, `Button.action`), не пиши inline-стили. UI-текст на русском.
+Кнопка действий в строке — `TemplateColumn` + `FuncDataTemplate<Row>` + замыкание `OnClick(_ => ShowRowActions(row))`; меню — `MenuFlyout` с `Command` из `[RelayCommand]`-методов. Никаких Tag.
 
-## 3. Вкладка — `ViewModels/MainWindowViewModel.cs`
+## 3. Данные
 
-Добавь параметр в primary constructor и элемент в `TabItems`:
+Загрузка — `Task.Run` + scope + сервисы, обновление коллекций через `Avalonia.Threading.Dispatcher.UIThread.InvokeAsync`; отмена — `CancellationTokenSource` + `Interlocked.Exchange` (скопируй `RefreshLoadCts` из ClientsScreen); `catch (OperationCanceledException) {}` + `catch (Exception ex)` c логом на русском. Троттлинг поиска — `DispatcherTimer` 400мс Stop/Start по `state.PropertyChanged`. Стартовая загрузка — `Avalonia.Threading.Dispatcher.UIThread.Post(async () => await SearchAsync())` в конце Build. Межэкранные события — `WeakReferenceMessenger`.
 
-```csharp
-public sealed partial class MainWindowViewModel(
-    ClientsViewModel clients, WarehousesViewModel warehouses, ...)
-    : ViewModelBase
-{
-    public ObservableCollection<ViewModelBase> TabItems { get; } =
-        [ clients, warehouses, ... ];
-}
-```
+## 4. Вкладка — `Views/MainWindow.cs`
 
-Порядок вкладок — по смыслу для пользователя; администрация обычно последняя.
-
-## 4. DataTemplate — `Views/MainWindow.axaml`
-
-В `ContentControl.DataTemplates` главного окна добавь маппинг тип VM → View:
-
-```xml
-<DataTemplate DataType="{x:Type vm:WarehousesViewModel}">
-    <views:WarehousesView DataContext="{Binding}" />
-</DataTemplate>
-```
+Добавь экран в массив `screens` (резолвится из DI — Scrutor регистрирует `*Screen` автоматически).
 
 ## 5. Проверка
 
-```bash
-dotnet build TastyEat.Workstation/TastyEat.Workstation.csproj
-```
+`dotnet build TastyEat.Workstation/TastyEat.Workstation.csproj` — если падает CS1955 на fluent-методах AMD, проверь наличие `Microsoft.Net.Compilers.Toolset` в csproj (генератор AMD требует новый Roslyn).
 
-Запусти приложение (`Skills/run-app`), вкладка должна появиться с иконкой и заголовком.
-
-Дальше: диалоги редактирования — скилл `add-dialog`; кнопки действий в `topbar` открывают их через `Interaction`.
+Диалоги редактирования — скилл `add-dialog`.

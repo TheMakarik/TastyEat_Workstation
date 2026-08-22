@@ -1,125 +1,82 @@
 ---
 name: add-dialog
-description: Добавить модальное окно редактирования в TastyEat.Workstation (Avalonia + ReactiveUI) — ValidatableViewModelBase с правилами валидации и Initialize, EditResult record, Interaction из родительского VM, RegisterHandler в code-behind, самозакрытие окна по SaveCommand. Используй, когда пользователь просит добавить окно, диалог, форму редактирования/создания сущности, подтверждение удаления.
+description: Добавить модальное окно в TastyEat.Workstation на Avalonia.Markup.Declarative (C# UI без axaml) — Window со вложенным State, computed-валидацией (XxxError/CanSave), Initialize для переиспользования, открытие ShowDialog(GetOwnerWindow()) из экрана. Используй при просьбах добавить окно, диалог, форму редактирования/создания, подтверждение удаления.
 ---
 
-# Добавление модального окна редактирования
+# Добавление модального окна (AMD, без axaml)
 
-Паттерн проекта: родительский VM объявляет `Interaction<EditViewModel, EditResult?>`, code-behind родителя открывает окно, окно закрывает само себя по команде сохранения. VM — transient и переиспользуется через `Initialize(...)`.
+Образцы: `Components/Dialogs/ClientEditDialog.cs` (валидация), `Components/Dialogs/ProductionEditDialog.cs` (динамические строки), `Components/Dialogs/OrderCollectionClientEditDialog.cs` (группы + фильтры).
 
-## 1. Результат — record в файле VM редактирования
+## 1. Диалог — `Components/Dialogs/<Name>Dialog.cs`
 
-```csharp
-public sealed record WarehouseEditResult(Warehouse Warehouse, bool IsNew);
-```
-
-## 2. ViewModel редактирования — `ViewModels/<Name>EditViewModel.cs`
-
-`sealed partial class : ValidatableViewModelBase`. Правила валидации — в конструкторе, гейт команды — из валидности. `Initialize(...)` вызывается перед каждым показом (VM transient и кэшируется/переиспользуется, состояние сбрасывается руками):
+Обычный класс `: Window` (не primary-ctor с параметрами вместе с пустым конструктором — CS8862), зависимости — поля через конструктор:
 
 ```csharp
-public sealed partial class WarehouseEditViewModel(
-    IServiceScopeFactory scopeFactory,
-    IOptions<StringLengthOptions> stringLengthOptions) : ValidatableViewModelBase
+public sealed partial class WarehouseEditDialog : Window
 {
-    private readonly StringLengthOptions _stringLengthOptions = stringLengthOptions.Value;
-    private readonly IObservable<bool> _canExecute = default!;
-
-    [Reactive]
-    private string _title = "Добавить склад";
-
-    [Reactive]
-    private string _name = string.Empty;
-
-    public int Id { get; private set; }
-    public bool IsNew => Id == 0;
-
-    public void Initialize(Warehouse? warehouse)
+    public sealed partial class State : ObservableObject
     {
-        Id = warehouse?.Id ?? 0;
-        _name = warehouse?.Name ?? string.Empty;
-        _title = IsNew ? "Добавить склад" : $"Редактировать: {warehouse!.Name}";
-        this.RaisePropertyChanged(nameof(IsNew));
+        [ObservableProperty]
+        public partial string Name { get; set; } = string.Empty;
+
+        public string? NameError => string.IsNullOrWhiteSpace(Name) ? "Название обязательно" : null;
+        public bool CanSave => NameError is null;
+
+        partial void OnNameChanged(string value) => RaiseValidation();
+
+        private void RaiseValidation()
+        {
+            OnPropertyChanged(nameof(NameError));
+            OnPropertyChanged(nameof(CanSave));
+        }
     }
 
-    protected override void OnInitialized()
-    {
-        this.ValidationRule(vm => vm.Name,
-            name => !string.IsNullOrWhiteSpace(name) && name.Length <= _stringLengthOptions.WarehouseNameMaxLength,
-            "Введите название (не длиннее максимума)");
+    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly State _state;
 
-        _canExecute = this.IsValid().ObserveOn(RxApp.MainThreadScheduler);
-    }
-
-    [RelayCommand(CanExecute = nameof(_canExecute), OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
-    private async Task<WarehouseEditResult?> SaveAsync()
+    public WarehouseEditDialog(IServiceScopeFactory scopeFactory)
     {
-        // scope + resolve transient-сервиса, маппинг VM -> WarehouseEditDto, Create/Update по IsNew
-        // образец: ClientEditViewModel.SaveAsync
+        _scopeFactory = scopeFactory;
+        Width = 440; Height = 380; CanResize = false;
+        WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+        Content = new Grid { Margin = new Thickness(24) }.Rows("Auto, *, Auto")
+            .Children(
+                new TextBlock { Text = "Склад", FontSize = 20, FontWeight = Avalonia.Media.FontWeight.Bold },
+                new StackPanel { Spacing = 16, Margin = new Thickness(0, 20, 0, 0) }.Grid_Row(1)
+                    .Children(UiFactory.DialogField("Название",
+                        new TextBox().Text(_state, x => x.Name, Avalonia.Data.BindingMode.TwoWay),
+                        UiFactory.ErrorText(_state, x => x.NameError))),
+                new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12, HorizontalAlignment = HorizontalAlignment.Right }.Grid_Row(2)
+                    .Children(
+                        new Button { Content = "Сохранить", IsDefault = true }
+                            .IsEnabled(_state, x => x.CanSave)
+                            .OnClick(async _ => await SaveAsync()),
+                        new Button { Content = "Отмена", IsCancel = true }
+                            .OnClick(_ => Close(null))));
     }
 }
 ```
 
-Образцы целиком: `ClientEditViewModel`, `ProductEditViewModel`, `DistributionEditViewModel`.
+Scrutor регистрирует `*Dialog` в DI автоматически (transient). Ссылочные списки (города, клиенты) — `ObservableCollection` в State + `.ItemsSource(_state, ...)`; для ComboBox задай `ItemTemplate = new FuncDataTemplate<T>((x, _) => new TextBlock { Text = x?.Name })`.
 
-## 3. Окно — `Views/<Name>EditWindow.axaml` + `.axaml.cs`
+## 2. Initialize + Result
 
-Обычная `Window` с `x:DataType` (или `reactive:ReactiveWindow<T>`). Кнопки: «Сохранить» — `Command="{Binding SaveCommand}"`, «Отмена» — `Click="CancelButton_Click"`. Code-behind закрывает окно сам:
+`public void Initialize(...)` сбрасывает State под режим добавления/редактирования (окно переиспользуется); результат — `Close(result)` / `Close(null)`. Заголовок окна динамический — подпишись на `PropertyChanged` State и обновляй `Title`. Асинхронные проверки (уникальность) — флаг `ServerError` в State, проверяется в Save перед записью (образец `CityEditDialog`).
 
-```csharp
-public partial class WarehouseEditWindow : Window
-{
-    public WarehouseEditWindow()
-    {
-        InitializeComponent();
-        ViewModel?.SaveCommand.Subscribe(result => Close(result));
-    }
-
-    private void CancelButton_Click(object? sender, RoutedEventArgs e) => Close(null);
-}
-```
-
-Окно центрируй (`WindowStartupLocation="CenterOwner"`, `SizeToContent="WidthAndHeight"`), стиль кнопок — `Classes="accent"` для сохранения.
-
-## 4. Родительский VM — Interaction и команда открытия
+## 3. Открытие из экрана
 
 ```csharp
-public Interaction<WarehouseEditViewModel, WarehouseEditResult?> EditWarehouseInteraction { get; } = new();
-
-[RelayCommand(OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler")]
-private async Task EditWarehouseAsync(Warehouse? warehouse = null)
-{
-    await using var scope = scopeFactory.CreateAsyncScope();
-    var editViewModel = scope.ServiceProvider.GetRequiredService<WarehouseEditViewModel>();
-    editViewModel.Initialize(warehouse);
-    var result = await EditWarehouseInteraction.Handle(editViewModel);
-    if (result is not null)
-        await SearchAsync(); // перезагрузить данные
-}
+await using var scope = scopeFactory.CreateAsyncScope();
+var dialog = scope.ServiceProvider.GetRequiredService<WarehouseEditDialog>();
+dialog.Initialize(warehouse);
+var result = await dialog.ShowDialog<WarehouseEditResult?>(this.GetOwnerWindow());
+if (result is not null)
+    await SearchAsync();
 ```
 
-## 5. Code-behind родительского View — открытие окна
+Подтверждения — `MessageDialog` (ShowInfoAsync/ConfirmAsync/ConfirmCancelAsync/ChoiceAsync) и `DeleteConfirmationDialog.ShowAsync` из `Views/Utils`; `GetOwnerWindow()` — там же.
 
-```csharp
-this.WhenActivated(disposables =>
-{
-    ViewModel?.EditWarehouseInteraction.RegisterHandler(async interaction =>
-        await interaction.ShowDialogAsync(this, vm => new WarehouseEditWindow { DataContext = vm }))
-        .DisposeWith(disposables);
-});
-```
+## 4. Проверка
 
-`ShowDialogAsync` и `GetOwnerWindow` — расширения из `Views/Utils/DialogExtensions.cs`; `MessageDialog` (ShowInfoAsync/ConfirmAsync/ConfirmCancelAsync/ChoiceAsync) и `DeleteConfirmationDialog` (ShowAsync) — в соседних файлах `Views/Utils/`. Используй их, не дублируй.
-
-## 6. Проверка
-
-```bash
-dotnet build TastyEat.Workstation/TastyEat.Workstation.csproj
-```
-
-## Частые ошибки
-
-- Не создавай окно редактирования из ViewModel напрямую (`new Window()` в VM) — только через `Interaction`, иначе VM перестаёт быть тестируемым.
-- Не пересоздавай edit-VM на каждое открытие — вызывай `Initialize(...)`.
-- Сохранение с невалидной формой должно быть невозможно: всегда геть `CanExecute` через `this.IsValid()`.
-- После успешного сохранения не забудь оповестить другие экраны при необходимости: `MessageBus.Current.SendMessage(...)` (образец `ClientPurchasesChangedMessage`).
+`dotnet build TastyEat.Workstation/TastyEat.Workstation.csproj`. Грабли: `FontWeight`/`Dispatcher` внутри Window пиши полностью квалифицированно; `Margin` — только `new Thickness(...)`; строки-подсписки (ItemsControl) — шаблон `FuncDataTemplate<Row>((row, _) => BuildRowUi(row))`.

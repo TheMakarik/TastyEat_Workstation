@@ -99,7 +99,7 @@ public sealed class WarehouseService(DataContext context, ILogger<WarehouseServi
 dotnet build TastyEat.Workstation/TastyEat.Workstation.csproj
 ```
 
-Затем создай экран (скилл `add-screen`) и окно редактирования (скилл `add-dialog`) если сущность нужна в UI.
+Затем создай экран (скилл `add-screen`, компонент `Components/<Name>Screen.cs`) и окно редактирования (скилл `add-dialog`, `Components/Dialogs/<Name>Dialog.cs`) если сущность нужна в UI.
 
 ## Частые ошибки
 

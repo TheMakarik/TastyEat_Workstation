@@ -9,7 +9,6 @@ using TastyEat.Workstation.Options;
 using TastyEat.Workstation.Services;
 using TastyEat.Workstation.Services.HostedServices;
 using TastyEat.Workstation.Services.Interfaces;
-using TastyEat.Workstation.ViewModels;
 
 namespace TastyEat.Workstation;
 
@@ -62,7 +61,7 @@ public sealed class Bootstrapper
 
         builder.Services.Scan(scan => scan
             .FromAssemblyOf<Bootstrapper>()
-            .AddClasses(c => c.Where(t => t.Name.EndsWith("ViewModel")))
+            .AddClasses(c => c.Where(t => t.Name.EndsWith("Screen") || t.Name.EndsWith("Dialog")))
             .AsSelf()
             .WithTransientLifetime());
         progress.Report(70);

@@ -31,7 +31,7 @@ public sealed class ProductTypeService(DataContext context, ILogger<ProductTypeS
         context.ProductTypes.Add(type);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Product type created: {ProductTypeName} (Id: {ProductTypeId})", type.Name, type.Id);
+        logger.LogInformation("Создан тип продукта: {ProductTypeName} (Id: {ProductTypeId})", type.Name, type.Id);
         return type;
     }
 
@@ -43,7 +43,7 @@ public sealed class ProductTypeService(DataContext context, ILogger<ProductTypeS
         type.Name = dto.Name;
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Product type updated: {ProductTypeName} (Id: {ProductTypeId})", type.Name, type.Id);
+        logger.LogInformation("Тип продукта обновлён: {ProductTypeName} (Id: {ProductTypeId})", type.Name, type.Id);
         return type;
     }
 
@@ -52,14 +52,14 @@ public sealed class ProductTypeService(DataContext context, ILogger<ProductTypeS
         var type = await context.ProductTypes.FindAsync(new object[] { id }, cancellationToken);
         if (type is null)
         {
-            logger.LogWarning("Attempted to delete non-existing product type with id {ProductTypeId}", id);
+            logger.LogWarning("Попытка удалить несуществующий тип продукта с id {ProductTypeId}", id);
             return;
         }
 
         context.ProductTypes.Remove(type);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Product type deleted: {ProductTypeName} (Id: {ProductTypeId})", type.Name, id);
+        logger.LogInformation("Тип продукта удалён: {ProductTypeName} (Id: {ProductTypeId})", type.Name, id);
     }
 
     public async Task<bool> ExistsByNameAsync(string name, int? excludingId = null, CancellationToken cancellationToken = default)

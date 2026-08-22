@@ -118,7 +118,7 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load products");
+            _logger.LogError(ex, "Не удалось загрузить продукты");
         }
         finally
         {
@@ -155,7 +155,7 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
 
             if (type is null)
             {
-                _logger.LogWarning("Product type with id {ProductTypeId} not found for editing", node.Id);
+                _logger.LogWarning("Тип продукта с id {ProductTypeId} не найден для редактирования", node.Id);
                 return;
             }
 
@@ -172,7 +172,7 @@ public sealed partial class ProductsViewModel : ViewModelBase, IDisposable
 
         if (product is null)
         {
-            _logger.LogWarning("Product with id {ProductId} not found for editing", node.Id);
+            _logger.LogWarning("Продукт с id {ProductId} не найден для редактирования", node.Id);
             return;
         }
 

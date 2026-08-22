@@ -28,7 +28,7 @@ public sealed class CityService(DataContext context, ILogger<CityService> logger
         var city = new City { Name = name };
         context.Cities.Add(city);
         await context.SaveChangesAsync(cancellationToken);
-        logger.LogInformation("City created: {CityName} (Id: {CityId})", city.Name, city.Id);
+        logger.LogInformation("Создан город: {CityName} (Id: {CityId})", city.Name, city.Id);
         return city;
     }
 

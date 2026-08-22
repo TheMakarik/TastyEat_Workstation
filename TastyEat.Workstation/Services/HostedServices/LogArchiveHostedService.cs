@@ -24,7 +24,7 @@ public sealed class LogArchiveHostedService(
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Failed to archive old log files");
+                logger.LogError(ex, "Не удалось заархивировать старые файлы логов");
             }
 
             await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
@@ -59,7 +59,7 @@ public sealed class LogArchiveHostedService(
         }
 
         logger.LogInformation(
-            "Archived {Count} old log files to {ArchivePath}",
+            "Заархивировано старых файлов логов: {Count}, архив: {ArchivePath}",
             logFiles.Count,
             archivePath);
     }

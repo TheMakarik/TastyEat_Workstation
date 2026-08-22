@@ -24,7 +24,7 @@ public sealed class DatabaseBackupHostedService(
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Failed to start database backup");
+                logger.LogError(ex, "Не удалось запустить резервное копирование базы данных");
             }
 
             await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
@@ -88,6 +88,6 @@ public sealed class DatabaseBackupHostedService(
             });
         }
 
-        logger.LogInformation("Started detached database backup to {TargetPath}", targetPath);
+        logger.LogInformation("Запущено фоновое резервное копирование базы данных в {TargetPath}", targetPath);
     }
 }

@@ -80,7 +80,7 @@ public sealed class ProductService(DataContext context, ILogger<ProductService> 
         context.Products.Add(product);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Product created: {ProductName} (Id: {ProductId})", product.Name, product.Id);
+        logger.LogInformation("Создан продукт: {ProductName} (Id: {ProductId})", product.Name, product.Id);
         return product;
     }
 
@@ -114,7 +114,7 @@ public sealed class ProductService(DataContext context, ILogger<ProductService> 
 
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Product updated: {ProductName} (Id: {ProductId})", product.Name, product.Id);
+        logger.LogInformation("Продукт обновлён: {ProductName} (Id: {ProductId})", product.Name, product.Id);
         return product;
     }
 
@@ -126,14 +126,14 @@ public sealed class ProductService(DataContext context, ILogger<ProductService> 
 
         if (product is null)
         {
-            logger.LogWarning("Attempted to delete non-existing product with id {ProductId}", id);
+            logger.LogWarning("Попытка удалить несуществующий продукт с id {ProductId}", id);
             return;
         }
 
         context.Products.Remove(product);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Product deleted: {ProductName} (Id: {ProductId})", product.Name, id);
+        logger.LogInformation("Продукт удалён: {ProductName} (Id: {ProductId})", product.Name, id);
     }
 
     public async Task<bool> ExistsByNameAsync(string name, int? excludingId = null, CancellationToken cancellationToken = default)

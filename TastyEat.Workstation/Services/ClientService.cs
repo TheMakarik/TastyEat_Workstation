@@ -59,7 +59,7 @@ public sealed class ClientService(DataContext context, ILogger<ClientService> lo
         context.Clients.Add(client);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Client created: {ClientName} (Id: {ClientId})", client.FullName, client.Id);
+        logger.LogInformation("Создан клиент: {ClientName} (Id: {ClientId})", client.FullName, client.Id);
         return client;
     }
 
@@ -89,7 +89,7 @@ public sealed class ClientService(DataContext context, ILogger<ClientService> lo
 
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Client updated: {ClientName} (Id: {ClientId})", client.FullName, client.Id);
+        logger.LogInformation("Клиент обновлён: {ClientName} (Id: {ClientId})", client.FullName, client.Id);
         return client;
     }
 
@@ -98,14 +98,14 @@ public sealed class ClientService(DataContext context, ILogger<ClientService> lo
         var client = await context.Clients.FindAsync(new object[] { id }, cancellationToken);
         if (client is null)
         {
-            logger.LogWarning("Attempted to delete non-existing client with id {ClientId}", id);
+            logger.LogWarning("Попытка удалить несуществующего клиента с id {ClientId}", id);
             return;
         }
 
         context.Clients.Remove(client);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Client deleted: {ClientName} (Id: {ClientId})", client.FullName, id);
+        logger.LogInformation("Клиент удалён: {ClientName} (Id: {ClientId})", client.FullName, id);
     }
 
     public async Task<bool> PhoneExistsAsync(string phoneNumber, int? excludingId = null, CancellationToken cancellationToken = default)

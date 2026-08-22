@@ -57,7 +57,7 @@ public sealed class OrderCollectionService(DataContext context, ILogger<OrderCol
         context.OrderCollections.Add(collection);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Order collection started (Id: {CollectionId})", collection.Id);
+        logger.LogInformation("Сбор заказов начат (Id: {CollectionId})", collection.Id);
         return collection;
     }
 
@@ -69,7 +69,7 @@ public sealed class OrderCollectionService(DataContext context, ILogger<OrderCol
         collection.EndDate = DateTime.Now;
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Order collection closed (Id: {CollectionId})", collection.Id);
+        logger.LogInformation("Сбор заказов завершён (Id: {CollectionId})", collection.Id);
         return collection;
     }
 
@@ -120,7 +120,7 @@ public sealed class OrderCollectionService(DataContext context, ILogger<OrderCol
         await context.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
-            "Order collection client saved (CollectionId: {CollectionId}, ClientId: {ClientId})",
+            "Сохранена запись клиента сбора заказов (CollectionId: {CollectionId}, ClientId: {ClientId})",
             collectionId,
             client.Id);
         return clientEntry;
@@ -135,14 +135,14 @@ public sealed class OrderCollectionService(DataContext context, ILogger<OrderCol
 
         if (collection is null)
         {
-            logger.LogWarning("Attempted to delete non-existing order collection with id {CollectionId}", id);
+            logger.LogWarning("Попытка удалить несуществующий сбор заказов с id {CollectionId}", id);
             return;
         }
 
         context.OrderCollections.Remove(collection);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Order collection deleted (Id: {CollectionId})", id);
+        logger.LogInformation("Сбор заказов удалён (Id: {CollectionId})", id);
     }
 
     public async Task DeleteClientAsync(int id, CancellationToken cancellationToken = default)
@@ -153,14 +153,14 @@ public sealed class OrderCollectionService(DataContext context, ILogger<OrderCol
 
         if (clientEntry is null)
         {
-            logger.LogWarning("Attempted to delete non-existing order collection client with id {ClientEntryId}", id);
+            logger.LogWarning("Попытка удалить несуществующую запись клиента сбора заказов с id {ClientEntryId}", id);
             return;
         }
 
         context.OrderCollectionClients.Remove(clientEntry);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Order collection client deleted (Id: {ClientEntryId})", id);
+        logger.LogInformation("Запись клиента сбора заказов удалена (Id: {ClientEntryId})", id);
     }
 
     public async Task<int> GetAvailableStockAsync(int productId, int? excludingClientId = null, CancellationToken cancellationToken = default)

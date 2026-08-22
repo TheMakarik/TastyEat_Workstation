@@ -18,7 +18,7 @@ sealed class Program
         var logger = CreateProgramLogger();
 
         RxApp.DefaultExceptionHandler = Observer.Create<Exception>(ex =>
-            logger.LogError(ex, "Unhandled ReactiveUI exception"));
+            logger.LogError(ex, "Необработанное исключение ReactiveUI"));
 
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);

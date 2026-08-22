@@ -126,7 +126,7 @@ public sealed class ProductionService(DataContext context, ILogger<ProductionSer
         await context.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
-            "Production batch #{BatchNumber} for {BatchDate} created/updated with {ItemCount} items",
+            "Партия производства #{BatchNumber} от {BatchDate} создана/обновлена, позиций: {ItemCount}",
             batch.Number,
             batch.StartDate.ToString("yyyy-MM-dd"),
             dto.Items.Count);
@@ -162,7 +162,7 @@ public sealed class ProductionService(DataContext context, ILogger<ProductionSer
         await context.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
-            "Production batch #{BatchNumber} updated for {BatchDate} with {ItemCount} items",
+            "Партия производства #{BatchNumber} от {BatchDate} обновлена, позиций: {ItemCount}",
             batch.Number,
             batch.StartDate.ToString("yyyy-MM-dd"),
             dto.Items.Count);
@@ -185,7 +185,7 @@ public sealed class ProductionService(DataContext context, ILogger<ProductionSer
 
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Production item updated: {ProductName} x {Quantity}", product.Name, dto.Quantity);
+        logger.LogInformation("Позиция производства обновлена: {ProductName} x {Quantity}", product.Name, dto.Quantity);
         return item;
     }
 
@@ -198,7 +198,7 @@ public sealed class ProductionService(DataContext context, ILogger<ProductionSer
 
         if (item is null)
         {
-            logger.LogWarning("Attempted to delete non-existing production item with id {ItemId}", id);
+            logger.LogWarning("Попытка удалить несуществующую позицию производства с id {ItemId}", id);
             return;
         }
 
@@ -210,7 +210,7 @@ public sealed class ProductionService(DataContext context, ILogger<ProductionSer
 
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Production item deleted: {ItemId}", id);
+        logger.LogInformation("Позиция производства удалена: {ItemId}", id);
     }
 
     public async Task DeleteBatchAsync(int id, CancellationToken cancellationToken = default)
@@ -221,13 +221,13 @@ public sealed class ProductionService(DataContext context, ILogger<ProductionSer
 
         if (batch is null)
         {
-            logger.LogWarning("Attempted to delete non-existing production batch with id {BatchId}", id);
+            logger.LogWarning("Попытка удалить несуществующую партию производства с id {BatchId}", id);
             return;
         }
 
         context.ProductionBatches.Remove(batch);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Production batch deleted: #{BatchNumber}", batch.Number);
+        logger.LogInformation("Партия производства удалена: #{BatchNumber}", batch.Number);
     }
 }

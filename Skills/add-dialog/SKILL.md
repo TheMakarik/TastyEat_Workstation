@@ -109,7 +109,7 @@ this.WhenActivated(disposables =>
 });
 ```
 
-ВНИМАНИЕ: `ShowDialogAsync` живёт в утерянном файле `Views/Utils/` — сейчас сборка проекта сломана (см. «Известные проблемы» в AGENTS.md). Если получаешь ошибки `CS0103`/`CS0246` на `ShowDialogAsync`/`GetOwnerWindow`/`MessageDialog` — сначала восстанови utils-расширения в `TastyEat.Workstation/Views/Utils/` (namespace `TastyEat.Workstation.Views.Utils`), затем продолжай. Временная альтернатива без utils: `await new WarehouseEditWindow { DataContext = vm }.ShowDialog<WarehouseEditResult?>(GetOwnerWindow())`.
+`ShowDialogAsync` и `GetOwnerWindow` — расширения из `Views/Utils/DialogExtensions.cs`; `MessageDialog` (ShowInfoAsync/ConfirmAsync/ConfirmCancelAsync/ChoiceAsync) и `DeleteConfirmationDialog` (ShowAsync) — в соседних файлах `Views/Utils/`. Используй их, не дублируй.
 
 ## 6. Проверка
 

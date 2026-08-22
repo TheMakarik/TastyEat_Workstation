@@ -51,7 +51,7 @@ public sealed class DistributionService(DataContext context, ILogger<Distributio
         context.Distributions.Add(distribution);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Distribution created (Id: {DistributionId}, Date: {Date})", distribution.Id, distribution.Date);
+        logger.LogInformation("Создан развоз (Id: {DistributionId}, Дата: {Date})", distribution.Id, distribution.Date);
         return distribution;
     }
 
@@ -77,7 +77,7 @@ public sealed class DistributionService(DataContext context, ILogger<Distributio
         await context.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
-            "Distribution client added (DistributionId: {DistributionId}, ClientId: {ClientId}, Total: {Total})",
+            "Добавлен клиент развоза (DistributionId: {DistributionId}, ClientId: {ClientId}, Сумма: {Total})",
             distributionId,
             clientId,
             totalAmount);
@@ -105,7 +105,7 @@ public sealed class DistributionService(DataContext context, ILogger<Distributio
         await context.SaveChangesAsync(cancellationToken);
 
         logger.LogInformation(
-            "Distribution client updated (Id: {DistributionClientId}, ClientId: {ClientId}, Total: {Total})",
+            "Клиент развоза обновлён (Id: {DistributionClientId}, ClientId: {ClientId}, Сумма: {Total})",
             distributionClientId,
             clientId,
             totalAmount);
@@ -121,14 +121,14 @@ public sealed class DistributionService(DataContext context, ILogger<Distributio
 
         if (distribution is null)
         {
-            logger.LogWarning("Attempted to delete non-existing distribution with id {DistributionId}", id);
+            logger.LogWarning("Попытка удалить несуществующий развоз с id {DistributionId}", id);
             return;
         }
 
         context.Distributions.Remove(distribution);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Distribution deleted (Id: {DistributionId})", id);
+        logger.LogInformation("Развоз удалён (Id: {DistributionId})", id);
     }
 
     public async Task DeleteClientAsync(int id, CancellationToken cancellationToken = default)
@@ -139,14 +139,14 @@ public sealed class DistributionService(DataContext context, ILogger<Distributio
 
         if (distributionClient is null)
         {
-            logger.LogWarning("Attempted to delete non-existing distribution client with id {DistributionClientId}", id);
+            logger.LogWarning("Попытка удалить несуществующего клиента развоза с id {DistributionClientId}", id);
             return;
         }
 
         context.DistributionClients.Remove(distributionClient);
         await context.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Distribution client deleted (Id: {DistributionClientId})", id);
+        logger.LogInformation("Клиент развоза удалён (Id: {DistributionClientId})", id);
     }
 
     public async Task<IReadOnlyList<ClientOrderedProductDto>> GetClientOrderedProductsAsync(int clientId, CancellationToken cancellationToken = default)

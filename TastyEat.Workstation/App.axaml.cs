@@ -16,7 +16,6 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
-        File.AppendAllText("/tmp/tastyeat_startup.log", $"[{DateTime.Now:O}] App.OnFrameworkInitializationCompleted{Environment.NewLine}");
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var viewModel = new LoadingWindowViewModel();

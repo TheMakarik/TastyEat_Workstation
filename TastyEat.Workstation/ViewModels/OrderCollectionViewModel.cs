@@ -107,7 +107,7 @@ public sealed partial class OrderCollectionViewModel : ViewModelBase, IDisposabl
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load order collections");
+            _logger.LogError(ex, "Не удалось загрузить сборы заказов");
         }
         finally
         {
@@ -190,21 +190,21 @@ public sealed partial class OrderCollectionViewModel : ViewModelBase, IDisposabl
         var clientEntry = await orderService.GetByIdAsync(node.Id);
         if (clientEntry is null)
         {
-            _logger.LogWarning("Order collection client with id {ClientEntryId} not found for editing", node.Id);
+            _logger.LogWarning("Запись клиента с id {ClientEntryId} не найдена для редактирования", node.Id);
             return;
         }
 
         var collection = await orderService.GetByIdAsync(node.CollectionId);
         if (collection is null)
         {
-            _logger.LogWarning("Parent collection for client entry {ClientEntryId} not found", node.Id);
+            _logger.LogWarning("Родительский сбор для записи клиента {ClientEntryId} не найден", node.Id);
             return;
         }
 
         var existing = collection.Clients.FirstOrDefault(cc => cc.Id == node.Id);
         if (existing is null)
         {
-            _logger.LogWarning("Client entry {ClientEntryId} not found in collection", node.Id);
+            _logger.LogWarning("Запись клиента {ClientEntryId} не найдена в сборе", node.Id);
             return;
         }
 

@@ -33,12 +33,12 @@ public sealed partial class AdministrationViewModel(
         try
         {
             var path = await backupService.CreateBackupAsync(folder);
-            logger.LogInformation("Backup created at {BackupPath}", path);
+            logger.LogInformation("Резервная копия создана: {BackupPath}", path);
             await ShowInfoInteraction.Handle($"Бекап сохранён:\n{path}").FirstAsync();
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to create backup");
+            logger.LogError(ex, "Не удалось создать резервную копию");
             await ShowInfoInteraction.Handle($"Ошибка при создании бекапа:\n{ex.Message}").FirstAsync();
         }
     }
@@ -58,12 +58,12 @@ public sealed partial class AdministrationViewModel(
         try
         {
             await backupService.RestoreBackupAsync(file);
-            logger.LogInformation("Database restored from {BackupPath}", file);
+            logger.LogInformation("База данных восстановлена из {BackupPath}", file);
             await ShowInfoInteraction.Handle("База данных восстановлена. Перезапустите приложение.").FirstAsync();
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to restore backup");
+            logger.LogError(ex, "Не удалось восстановить резервную копию");
             await ShowInfoInteraction.Handle($"Ошибка при восстановлении бекапа:\n{ex.Message}").FirstAsync();
         }
     }

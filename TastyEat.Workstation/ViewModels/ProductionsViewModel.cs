@@ -135,7 +135,7 @@ public sealed partial class ProductionsViewModel : ViewModelBase, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load production and distribution data");
+            _logger.LogError(ex, "Не удалось загрузить данные производств и развозов");
         }
         finally
         {
@@ -251,7 +251,7 @@ public sealed partial class ProductionsViewModel : ViewModelBase, IDisposable
 
         if (item is null)
         {
-            _logger.LogWarning("Production item with id {ItemId} not found for editing", node.Id);
+            _logger.LogWarning("Позиция производства с id {ItemId} не найдена для редактирования", node.Id);
             return;
         }
 
@@ -277,7 +277,7 @@ public sealed partial class ProductionsViewModel : ViewModelBase, IDisposable
 
         if (batch is null)
         {
-            _logger.LogWarning("Production batch with id {BatchId} not found for editing", node.Id);
+            _logger.LogWarning("Партия производства с id {BatchId} не найдена для редактирования", node.Id);
             return;
         }
 
@@ -298,7 +298,7 @@ public sealed partial class ProductionsViewModel : ViewModelBase, IDisposable
         var distributionClient = await distributionService.GetClientByIdAsync(node.Id);
         if (distributionClient is null)
         {
-            _logger.LogWarning("Distribution client with id {DistributionClientId} not found for editing", node.Id);
+            _logger.LogWarning("Клиент развоза с id {DistributionClientId} не найден для редактирования", node.Id);
             return;
         }
 

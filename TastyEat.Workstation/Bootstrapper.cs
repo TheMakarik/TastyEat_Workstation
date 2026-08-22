@@ -20,7 +20,7 @@ public sealed class Bootstrapper
         progress.Report(5);
 
         var builder = Host.CreateApplicationBuilder();
-        builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
+        builder.Configuration.AddJsonFile(Path.Join(AppContext.BaseDirectory, "appsettings.json"), optional: false, reloadOnChange: false);
         progress.Report(10);
 
         builder.Services.Configure<StringLengthOptions>(builder.Configuration.GetSection(nameof(StringLengthOptions)));

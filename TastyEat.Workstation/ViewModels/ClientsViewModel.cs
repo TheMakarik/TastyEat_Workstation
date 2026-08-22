@@ -143,7 +143,7 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load clients");
+            _logger.LogError(ex, "Не удалось загрузить клиентов");
         }
         finally
         {
@@ -193,7 +193,7 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load client share chart");
+            _logger.LogError(ex, "Не удалось загрузить диаграмму доли клиентов");
         }
         finally
         {
@@ -220,7 +220,7 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load collection statistic chart");
+            _logger.LogError(ex, "Не удалось загрузить диаграмму статистики сборов заказов");
         }
         finally
         {
@@ -251,7 +251,7 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load client product share chart");
+            _logger.LogError(ex, "Не удалось загрузить диаграмму доли товаров клиента");
         }
         finally
         {
@@ -282,7 +282,7 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load client purchase history chart");
+            _logger.LogError(ex, "Не удалось загрузить график истории покупок клиента");
         }
         finally
         {
@@ -301,7 +301,7 @@ public sealed partial class ClientsViewModel : ViewModelBase, IDisposable
 
         if (client is null)
         {
-            _logger.LogWarning("Client with id {ClientId} not found for editing", row.Id);
+            _logger.LogWarning("Клиент с id {ClientId} не найден для редактирования", row.Id);
             return;
         }
 

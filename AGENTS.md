@@ -49,6 +49,7 @@ TastyEat.Workstation/
 ├── Views/
 │   ├── *.axaml(.cs)          # экраны и окна редактирования
 │   ├── Controls/             # переиспользуемые контролы (LoadingControl, SearchTextBox, SectionHeader)
+│   ├── Utils/                # диалоги и расширения: DialogExtensions (ShowDialogAsync, GetOwnerWindow), MessageDialog, DeleteConfirmationDialog
 │   ├── Converters/           # ТОЛЬКО MakripExtensions (см. раздел «Конвертеры»)
 │   └── Styles/               # Common.axaml агрегирует ButtonStyles/ControlsStyles/ManagementViewStyles
 ├── Options/                  # классы настроек, привязанные к секциям appsettings.json
@@ -63,7 +64,7 @@ Skills/                       # скиллы для типовых задач э
 
 `Program.cs` (Serilog, `RxApp.DefaultExceptionHandler`, `UseReactiveUI()`) → `App.axaml.cs`: показывается `LoadingWindow`, внутри запускается `Bootstrapper.BuildAppAsync(IProgress<double>)` с прогрессом в процентах → по готовности открывается `MainWindow`, loading закрывается. `Bootstrapper`:
 
-1. `Host.CreateApplicationBuilder()` + `appsettings.json` (обязательный);
+1. `Host.CreateApplicationBuilder()` + `appsettings.json` (обязательный; путь от `AppContext.BaseDirectory` — запуск работает из любого каталога);
 2. `Configure<TOptions>` для всех секций настроек;
 3. `ApplicationDataService` создаётся вручную до build (нужны пути для логов/БД), регистрируется singleton;
 4. Serilog: `WriteTo.File(LogsDirectory/log-.txt, RollingInterval.Day)`;
@@ -100,7 +101,7 @@ Models/Tables (POCO)  →  Services (DbContext + DTO)  →  ViewModels (вали
 4. **Сахар C# 14**: primary constructors (в т.ч. для классов), collection expressions (`= [];`, `[ a, b ]`), pattern matching, target-typed `new`.
 5. **Без сокращений в именах**: `directory`, а не `dir`; `cancellationToken`, а не `token` в публичных API сервисов.
 6. **Лаконичность**: без лишних `{}` (expression-bodied члены, `if (x) return;`), без пустых классов-обёрток и «на всякий случай» кода.
-7. **Логгируй**: `ILogger<T>` в каждом сервисе; структурированные шаблоны с именованными плейсхолдерами, не интерполяция строк.
+7. **Логгируй**: `ILogger<T>` в каждом сервисе; структурированные шаблоны с именованными плейсхолдерами, не интерполяция строк; текст сообщений логов — на русском.
 8. **CancellationToken**: каждый метод сервиса принимает `CancellationToken cancellationToken = default` и пробрасывает в EF-вызовы. В VM — паттерн отменяемой перезагрузки через `CancellationTokenSource` + `Interlocked.Exchange` (см. `ClientsViewModel.RefreshLoadCts`).
 9. **Ошибки**: в командах — `catch (OperationCanceledException) {}` + `catch (Exception ex)` с логом; пользователю — через `Interaction`, не через `MessageBox`.
 10. **Команды**: только `[RelayCommand]` (source generator), у async-команд явно `OutputScheduler = "ReactiveUI.RxApp.MainThreadScheduler"`, гейт через `CanExecute = nameof(_canExecute)` из валидации.
@@ -174,8 +175,7 @@ xmlns:conv="using:TastyEat.Workstation.Views.Converters"
 
 ## Известные проблемы (не забудь при первой возможности)
 
-- **Сборка сломана**: утерян `Views/Utils/` с `ShowDialogAsync`, `GetOwnerWindow`, `MessageDialog`, `DeleteConfirmationDialog` (namespace `TastyEat.Workstation.Views.Utils`) — используется в 6 code-behind файлах (`AdministrationView`, `OrderCollectionView`, `ProductsView`, `DistributionEditWindow` и др.), но определений нет ни в рабочем дереве, ни в истории git. Нужно восстановить.
 - `bin/` и `obj/` закоммичены в git — стоит добавить `.gitignore`.
-- `App.axaml.cs` пишет отладочный лог в `/tmp/tastyeat_startup.log` — убрать после отладки.
 - `IEntityService<T>`/`EntityService<T>` сейчас никем не используются (реальная работа через специализированные сервисы) — либо найти применение, либо удалить.
 - `AdministrationOptions.ScriptsDirectoryName` есть в классе, но отсутствует в `appsettings.json` (работает дефолт `"Scripts"`).
+- Предупреждение `NU1903`: транзитивный пакет `SQLitePCLRaw.lib.e_sqlite3` 2.1.11 имеет известную уязвимость — уйдёт при обновлении EF Core/SQLitePCLRaw после выхода патча.

@@ -370,16 +370,28 @@ public sealed class AppStyles : Styles
         {
             Setters = { new Setter(Border.BorderBrushProperty, AccentLight) }
         },
-        new Style(x => x.OfType<DatePicker>())
-        {
-            Setters = { new Setter(Border.BorderBrushProperty, Accent) }
-        },
         new Style(x => x.OfType<Calendar>())
         {
             Setters =
             {
                 new Setter(Panel.BackgroundProperty, Brushes.White),
-                new Setter(TemplatedControl.ForegroundProperty, Accent)
+                new Setter(TemplatedControl.ForegroundProperty, new SolidColorBrush(Color.Parse("#333333")))
+            }
+        },
+        new Style(x => x.OfType<CalendarDayButton>())
+        {
+            Setters =
+            {
+                new Setter(TemplatedControl.ForegroundProperty, new SolidColorBrush(Color.Parse("#333333"))),
+                new Setter(TemplatedControl.BackgroundProperty, Brushes.White)
+            }
+        },
+        new Style(x => x.OfType<CalendarDayButton>().Class(":today"))
+        {
+            Setters =
+            {
+                new Setter(TemplatedControl.ForegroundProperty, Accent),
+                new Setter(Button.FontWeightProperty, FontWeight.Bold)
             }
         },
         new Style(x => x.OfType<CalendarDayButton>().Class(":selected"))
@@ -398,6 +410,14 @@ public sealed class AppStyles : Styles
                 new Setter(TemplatedControl.ForegroundProperty, Brushes.White)
             }
         },
+        new Style(x => x.OfType<CalendarDayButton>().Class(":blackout"))
+        {
+            Setters = { new Setter(TemplatedControl.ForegroundProperty, new SolidColorBrush(Color.Parse("#BBBBBB"))) }
+        },
+        new Style(x => x.OfType<CalendarButton>())
+        {
+            Setters = { new Setter(TemplatedControl.ForegroundProperty, new SolidColorBrush(Color.Parse("#333333"))) }
+        },
         new Style(x => x.OfType<CalendarButton>().Class(":selected"))
         {
             Setters =
@@ -413,6 +433,34 @@ public sealed class AppStyles : Styles
                 new Setter(Panel.BackgroundProperty, AccentLight),
                 new Setter(TemplatedControl.ForegroundProperty, Brushes.White)
             }
+        },
+        new Style(x => x.OfType<DatePicker>())
+        {
+            Setters =
+            {
+                new Setter(Border.BorderBrushProperty, Accent),
+                new Setter(TemplatedControl.ForegroundProperty, new SolidColorBrush(Color.Parse("#333333")))
+            }
+        },
+        new Style(x => x.OfType<Calendar>().Template().OfType<Button>())
+        {
+            Setters =
+            {
+                new Setter(TemplatedControl.ForegroundProperty, new SolidColorBrush(Color.Parse("#333333"))),
+                new Setter(Panel.BackgroundProperty, Brushes.Transparent)
+            }
+        },
+        new Style(x => x.OfType<Calendar>().Template().OfType<Button>().Class(":pointerover"))
+        {
+            Setters =
+            {
+                new Setter(Panel.BackgroundProperty, new SolidColorBrush(Color.Parse("#F5F3FF"))),
+                new Setter(TemplatedControl.ForegroundProperty, Accent)
+            }
+        },
+        new Style(x => x.OfType<DatePicker>().Template().OfType<TextBlock>())
+        {
+            Setters = { new Setter(TextBlock.ForegroundProperty, new SolidColorBrush(Color.Parse("#333333"))) }
         }
     ];
 }

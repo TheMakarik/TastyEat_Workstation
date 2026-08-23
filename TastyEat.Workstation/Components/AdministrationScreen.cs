@@ -8,7 +8,9 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TastyEat.Workstation.Services;
 using TastyEat.Workstation.Services.Interfaces;
 using TastyEat.Workstation.Ui;
 using TastyEat.Workstation.Views.Utils;
@@ -18,6 +20,7 @@ namespace TastyEat.Workstation.Components;
 public sealed partial class AdministrationScreen(
     IBackupService backupService,
     IApplicationDataService applicationDataService,
+    IServiceScopeFactory scopeFactory,
     ILogger<AdministrationScreen> logger) : ScreenComponent<AdministrationScreen.State>(new State())
 {
     public sealed partial class State : ObservableObject
@@ -39,21 +42,32 @@ public sealed partial class AdministrationScreen(
         };
         logsPathText.Margin = new Thickness(0, 15, 0, 0);
 
-        var buttons = new UniformGrid { Columns = 1, HorizontalAlignment = HorizontalAlignment.Left };
+        var backupsPathText = new TextBlock
+        {
+            Text = $"Путь к резервным копиям: {applicationDataService.BackupsDirectory}",
+            TextWrapping = TextWrapping.Wrap,
+            Foreground = Brush.Parse("#666666")
+        };
+        backupsPathText.Margin = new Thickness(0, 15, 0, 0);
+
+        var content = new StackPanel { Margin = new Thickness(0, 15, 0, 0), HorizontalAlignment = HorizontalAlignment.Left };
+
         var openLogsButton = UiFactory.ActionButton(MaterialIconKind.FolderOpenOutline, "Открыть папку логов", () => _ = OpenLogsFolderAsync(), "sidebarAction");
         var createBackupButton = UiFactory.ActionButton(MaterialIconKind.ContentSaveAll, "Создать резервную копию", () => _ = CreateBackupAsync(), "sidebarAction");
         var restoreBackupButton = UiFactory.ActionButton(MaterialIconKind.Restore, "Восстановить из копии", () => _ = RestoreBackupAsync(), "sidebarAction");
-
         foreach (var button in new Control[] { openLogsButton, createBackupButton, restoreBackupButton })
             button.Margin = new Thickness(0, 15, 0, 15);
 
-        buttons.Children.Add(openLogsButton);
-        buttons.Children.Add(createBackupButton);
-        buttons.Children.Add(restoreBackupButton);
-
-        var content = new StackPanel { Margin = new Thickness(0, 15, 0, 0), HorizontalAlignment = HorizontalAlignment.Left };
         content.Children.Add(logsPathText);
-        content.Children.Add(buttons);
+        content.Children.Add(openLogsButton);
+        content.Children.Add(backupsPathText);
+        content.Children.Add(createBackupButton);
+        content.Children.Add(restoreBackupButton);
+#if DEBUG
+        var seedButton = UiFactory.ActionButton(MaterialIconKind.DatabasePlus, "Заполнить базу данных", () => _ = SeedDebugDataAsync(), "sidebarAction");
+        seedButton.Margin = new Thickness(0, 15, 0, 15);
+        content.Children.Add(seedButton);
+#endif
 
         return new Grid().Rows("Auto, *").Classes("managementLayout")
             .Children(
@@ -153,6 +167,34 @@ public sealed partial class AdministrationScreen(
             ScreenState.IsBusy = false;
         }
     }
+
+#if DEBUG
+    [RelayCommand]
+    private async Task SeedDebugDataAsync()
+    {
+        var confirmed = await MessageDialog.ConfirmAsync(
+            this.GetOwnerWindow(),
+            "Заполнить базу тестовыми данными (500 клиентов, ~100 товаров, 30 партий, 20 развозов, 9 сборов заказов)?\nСуществующие данные останутся.");
+        if (!confirmed)
+            return;
+
+        ScreenState.IsBusy = true;
+        try
+        {
+            await DebugDataSeeder.SeedAsync(scopeFactory, logger);
+            await MessageDialog.ShowInfoAsync(this.GetOwnerWindow(), "База данных заполнена тестовыми значениями.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Не удалось заполнить базу тестовыми данными");
+            await MessageDialog.ShowInfoAsync(this.GetOwnerWindow(), $"Ошибка при заполнении базы:\n{ex.Message}");
+        }
+        finally
+        {
+            ScreenState.IsBusy = false;
+        }
+    }
+#endif
 
     [RelayCommand]
     private Task OpenLogsFolderAsync()

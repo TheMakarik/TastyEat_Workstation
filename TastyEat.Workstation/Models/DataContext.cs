@@ -28,7 +28,6 @@ public sealed class DataContext : DbContext
     public DbSet<OrderCollection> OrderCollections { get; set; }
     public DbSet<OrderCollectionClient> OrderCollectionClients { get; set; }
     public DbSet<OrderCollectionItem> OrderCollectionItems { get; set; }
-    public DbSet<ApplicationSetting> ApplicationSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -327,7 +327,7 @@ public sealed partial class ProductionsScreen(
 
         await RefreshProductTypesAsync();
 
-        var dialog = scope.ServiceProvider.GetRequiredService<Dialogs.ProductionItemEditDialog>();
+        var dialog = scope.ServiceProvider.GetRequiredService<Dialogs.ProductionPositionEditDialog>();
         dialog.Initialize(_productTypes, item.Product!.ProductType, item.Product, (int)item.Quantity);
 
         var result = await dialog.ShowDialog<ProductionItemEditDto?>(this.GetOwnerWindow());

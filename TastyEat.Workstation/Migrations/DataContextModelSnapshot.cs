@@ -17,25 +17,6 @@ namespace TastyEat.Workstation.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.9");
 
-            modelBuilder.Entity("TastyEat.Workstation.Models.Tables.ApplicationSetting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ApplicationSettings");
-                });
-
             modelBuilder.Entity("TastyEat.Workstation.Models.Tables.City", b =>
                 {
                     b.Property<int>("Id")

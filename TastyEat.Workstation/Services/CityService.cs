@@ -38,4 +38,24 @@ public sealed class CityService(DataContext context, ILogger<CityService> logger
             .AsNoTracking()
             .AnyAsync(c => c.Name == name, cancellationToken);
     }
+
+    public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var hasClients = await context.Clients
+            .AsNoTracking()
+            .AnyAsync(c => c.City.Id == id, cancellationToken);
+        if (hasClients)
+            throw new InvalidOperationException("В этом городе есть клиенты — сначала перенесите или удалите их");
+
+        var city = await context.Cities.FindAsync(new object[] { id }, cancellationToken);
+        if (city is null)
+        {
+            logger.LogWarning("Попытка удалить несуществующий город с id {CityId}", id);
+            return;
+        }
+
+        context.Cities.Remove(city);
+        await context.SaveChangesAsync(cancellationToken);
+        logger.LogInformation("Город удалён: {CityName} (Id: {CityId})", city.Name, id);
+    }
 }

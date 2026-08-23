@@ -26,7 +26,7 @@ public sealed partial class LoadingWindow : Window
         CanResize = false;
         ShowInTaskbar = false;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        WindowDecorations = global::Avalonia.Controls.WindowDecorations.BorderOnly;
+        WindowDecorations = WindowDecorations.BorderOnly;
 
         Content = new Border
         {

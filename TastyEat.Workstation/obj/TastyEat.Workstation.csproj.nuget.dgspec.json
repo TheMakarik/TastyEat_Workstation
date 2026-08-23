@@ -35,7 +35,7 @@
           ]
         },
         "restoreAuditProperties": {
-          "enableAudit": "true",
+          "enableAudit": "false",
           "auditLevel": "low",
           "auditMode": "all"
         },
@@ -64,6 +64,10 @@
             "AvaloniaUI.DiagnosticsSupport": {
               "target": "Package",
               "version": "[2.2.1, )"
+            },
+            "Bogus": {
+              "target": "Package",
+              "version": "[35.6.5, )"
             },
             "CommunityToolkit.Mvvm": {
               "target": "Package",

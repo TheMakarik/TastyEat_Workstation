@@ -155,7 +155,7 @@ public sealed partial class ClientsScreen(
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12 }
             .Children(
                 UiFactory.ActionButton(MaterialIconKind.AccountPlus, "Добавить клиента", () => _ = AddClientAsync()),
-                UiFactory.ActionButton(MaterialIconKind.CityVariantOutline, "Добавить город", () => _ = AddCityAsync(), "sidebarAction"));
+                UiFactory.ActionButton(MaterialIconKind.CityVariantOutline, "Управление городами", () => _ = ManageCitiesAsync(), "sidebarAction"));
 
         Avalonia.Threading.Dispatcher.UIThread.Post(async () => await SearchAsync());
 
@@ -267,6 +267,17 @@ public sealed partial class ClientsScreen(
         if (accepted == true)
             await SearchAsync();
     }
+
+    [RelayCommand]
+    private async Task ManageCitiesAsync()
+    {
+        await using var scope = scopeFactory.CreateAsyncScope();
+        var dialog = scope.ServiceProvider.GetRequiredService<Dialogs.CityManagementDialog>();
+        dialog.Initialize();
+        await dialog.ShowDialog<object?>(this.GetOwnerWindow());
+        await SearchAsync();
+    }
+
 
     [RelayCommand]
     private async Task EditClientAsync(ClientRow row)

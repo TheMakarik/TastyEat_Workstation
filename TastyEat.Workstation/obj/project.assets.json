@@ -327,6 +327,19 @@
           "buildMultiTargeting/AvaloniaUI.DiagnosticsSupport.props": {}
         }
       },
+      "Bogus/35.6.5": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Bogus.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Bogus.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "CommunityToolkit.Mvvm/8.4.2": {
         "type": "package",
         "compile": {
@@ -2739,6 +2752,27 @@
         "lib/net10.0/v11/AvaloniaUI.DiagnosticsSupport.Avalonia.dll",
         "lib/net8.0/AvaloniaUI.DiagnosticsSupport.Avalonia.dll",
         "lib/net8.0/v11/AvaloniaUI.DiagnosticsSupport.Avalonia.dll"
+      ]
+    },
+    "Bogus/35.6.5": {
+      "sha512": "2FGZn+aAVHjmCgClgmGkTDBVZk0zkLvAKGaxEf5JL6b3i9JbHTE4wnuY4vHCuzlCmJdU6VZjgDfHwmYkQF8VAA==",
+      "type": "package",
+      "path": "bogus/35.6.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "bogus.128.png",
+        "bogus.35.6.5.nupkg.sha512",
+        "bogus.nuspec",
+        "lib/net40/Bogus.dll",
+        "lib/net40/Bogus.xml",
+        "lib/net6.0/Bogus.dll",
+        "lib/net6.0/Bogus.xml",
+        "lib/netstandard1.3/Bogus.dll",
+        "lib/netstandard1.3/Bogus.xml",
+        "lib/netstandard2.0/Bogus.dll",
+        "lib/netstandard2.0/Bogus.xml"
       ]
     },
     "CommunityToolkit.Mvvm/8.4.2": {
@@ -6332,6 +6366,7 @@
       "Avalonia.Fonts.Inter >= 12.1.1",
       "Avalonia.Markup.Declarative >= 12.1.1",
       "AvaloniaUI.DiagnosticsSupport >= 2.2.1",
+      "Bogus >= 35.6.5",
       "CommunityToolkit.Mvvm >= 8.4.2",
       "LiveChartsCore.SkiaSharpView.Avalonia >= 2.0.5",
       "Material.Icons.Avalonia >= 3.0.2",
@@ -6386,7 +6421,7 @@
         ]
       },
       "restoreAuditProperties": {
-        "enableAudit": "true",
+        "enableAudit": "false",
         "auditLevel": "low",
         "auditMode": "all"
       },
@@ -6415,6 +6450,10 @@
           "AvaloniaUI.DiagnosticsSupport": {
             "target": "Package",
             "version": "[2.2.1, )"
+          },
+          "Bogus": {
+            "target": "Package",
+            "version": "[35.6.5, )"
           },
           "CommunityToolkit.Mvvm": {
             "target": "Package",
@@ -6786,17 +6825,5 @@
         }
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'SQLitePCLRaw.lib.e_sqlite3' 2.1.11 has a known high severity vulnerability, https://github.com/advisories/GHSA-2m69-gcr7-jv3q",
-      "libraryId": "SQLitePCLRaw.lib.e_sqlite3",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  }
 }

@@ -8,4 +8,5 @@ public interface ICityService
     Task<City?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<City> CreateAsync(string name, CancellationToken cancellationToken = default);
     Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken = default);
+    Task DeleteAsync(int id, CancellationToken cancellationToken = default);
 }

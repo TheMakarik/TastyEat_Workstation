@@ -49,6 +49,12 @@ public sealed class ProductTypeService(DataContext context, ILogger<ProductTypeS
 
     public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
+        var hasProducts = await context.Products
+            .AsNoTracking()
+            .AnyAsync(p => p.ProductType.Id == id, cancellationToken);
+        if (hasProducts)
+            throw new InvalidOperationException("С этим типом связаны товары — сначала удалите или перенесите их");
+
         var type = await context.ProductTypes.FindAsync(new object[] { id }, cancellationToken);
         if (type is null)
         {

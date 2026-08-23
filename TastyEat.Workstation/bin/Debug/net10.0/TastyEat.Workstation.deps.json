@@ -13,6 +13,7 @@
           "Avalonia.Fonts.Inter": "12.1.1",
           "Avalonia.Markup.Declarative": "12.1.1",
           "AvaloniaUI.DiagnosticsSupport": "2.2.1",
+          "Bogus": "35.6.5",
           "CommunityToolkit.Mvvm": "8.4.2",
           "LiveChartsCore.SkiaSharpView.Avalonia": "2.0.5",
           "Material.Icons.Avalonia": "3.0.2",
@@ -260,6 +261,14 @@
           "lib/net10.0/AvaloniaUI.DiagnosticsSupport.Avalonia.dll": {
             "assemblyVersion": "2.2.1.0",
             "fileVersion": "2.2.1.0"
+          }
+        }
+      },
+      "Bogus/35.6.5": {
+        "runtime": {
+          "lib/net6.0/Bogus.dll": {
+            "assemblyVersion": "35.6.5.0",
+            "fileVersion": "35.6.5.0"
           }
         }
       },
@@ -1865,6 +1874,13 @@
       "sha512": "sha512-PXviRj+8t6IT7JdnVhs1EET+VgGB/K1Ju3yL/Q9sXR2YD9NzkIYybyfJG3DPXcTYXpEJZJvxGiCTjH1N8AkLhQ==",
       "path": "avaloniaui.diagnosticssupport/2.2.1",
       "hashPath": "avaloniaui.diagnosticssupport.2.2.1.nupkg.sha512"
+    },
+    "Bogus/35.6.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2FGZn+aAVHjmCgClgmGkTDBVZk0zkLvAKGaxEf5JL6b3i9JbHTE4wnuY4vHCuzlCmJdU6VZjgDfHwmYkQF8VAA==",
+      "path": "bogus/35.6.5",
+      "hashPath": "bogus.35.6.5.nupkg.sha512"
     },
     "CommunityToolkit.Mvvm/8.4.2": {
       "type": "package",

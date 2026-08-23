@@ -38,20 +38,30 @@ public class App : Application
             ["SystemListLowColor"] = Color.Parse("#FFE0E0E0"),
             ["SystemBaseHighColor"] = Color.Parse("#FF000000"),
             ["SystemBaseMediumLowColor"] = Color.Parse("#FF666666"),
-            ["SystemAccentColor"] = Color.Parse("#512BD4")
+            ["SystemAccentColor"] = Color.Parse("#512BD4"),
+            ["SystemAccentColorLight1"] = Color.Parse("#6C46DC"),
+            ["SystemAccentColorLight2"] = Color.Parse("#8B6CE4"),
+            ["SystemAccentColorLight3"] = Color.Parse("#AB95EC"),
+            ["SystemAccentColorDark1"] = Color.Parse("#4726B7"),
+            ["SystemAccentColorDark2"] = Color.Parse("#3B1F9A"),
+            ["SystemAccentColorDark3"] = Color.Parse("#2F187C")
         };
         Resources.ThemeDictionaries[ThemeVariant.Dark] = new ResourceDictionary
         {
             ["SystemListLowColor"] = Color.Parse("#FF2D2D2D"),
             ["SystemBaseHighColor"] = Color.Parse("#FFFFFFFF"),
             ["SystemBaseMediumLowColor"] = Color.Parse("#FFA0A0A0"),
-            ["SystemAccentColor"] = Color.Parse("#7559E0")
+            ["SystemAccentColor"] = Color.Parse("#7559E0"),
+            ["SystemAccentColorLight1"] = Color.Parse("#8B7BE6"),
+            ["SystemAccentColorLight2"] = Color.Parse("#A99CEF"),
+            ["SystemAccentColorLight3"] = Color.Parse("#C4B9F4"),
+            ["SystemAccentColorDark1"] = Color.Parse("#6347C4"),
+            ["SystemAccentColorDark2"] = Color.Parse("#5239AD"),
+            ["SystemAccentColorDark3"] = Color.Parse("#412C95")
         };
 
-        Resources.Add("SystemListLowColor", Color.Parse("#FFE0E0E0"));
-        Resources.Add("SystemBaseHighColor", Color.Parse("#FF000000"));
-        Resources.Add("SystemBaseMediumLowColor", Color.Parse("#FF666666"));
-        Resources.Add("SystemAccentColor", Color.Parse("#512BD4"));
+        foreach (var (key, color) in (Resources.ThemeDictionaries[ThemeVariant.Default] as ResourceDictionary)!)
+            Resources.Add(key, color);
 
         Resources.Add("DotNetPurpleColor", Color.Parse("#512BD4"));
         Resources.Add("AccentColor", new SolidColorBrush(Color.Parse("#512BD4")));

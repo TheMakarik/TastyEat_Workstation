@@ -96,7 +96,7 @@ public sealed partial class ProductsScreen(
 
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12 }
             .Children(
-                UiFactory.ActionButton(MaterialIconKind.ShapeOutline, "Добавить тип", () => _ = AddProductTypeAsync(), "sidebarAction"),
+                UiFactory.ActionButton(MaterialIconKind.ShapeOutline, "Управление типами", () => _ = ManageProductTypesAsync(), "sidebarAction"),
                 UiFactory.ActionButton(MaterialIconKind.Plus, "Добавить продукт", () => _ = AddProductAsync()));
 
         Avalonia.Threading.Dispatcher.UIThread.Post(async () => await SearchAsync());
@@ -204,13 +204,13 @@ public sealed partial class ProductsScreen(
     }
 
     [RelayCommand]
-    private async Task AddProductTypeAsync()
+    private async Task ManageProductTypesAsync()
     {
         await using var scope = scopeFactory.CreateAsyncScope();
-        var dialog = scope.ServiceProvider.GetRequiredService<ProductTypeEditDialog>();
-        var accepted = await dialog.ShowDialog<bool?>(this.GetOwnerWindow());
-        if (accepted == true)
-            await SearchAsync();
+        var dialog = scope.ServiceProvider.GetRequiredService<Dialogs.ProductTypeManagementDialog>();
+        dialog.Initialize();
+        await dialog.ShowDialog<object?>(this.GetOwnerWindow());
+        await SearchAsync();
     }
 
     [RelayCommand]
